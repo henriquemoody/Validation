@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Helpers\CanSimplifyRule;
 use Respect\Validation\Validatable;
 use function array_shift;
 use function count;
@@ -26,6 +27,8 @@ use function current;
  */
 final class Not extends AbstractRule
 {
+    use CanSimplifyRule;
+
     /**
      * @var Validatable
      */
@@ -46,6 +49,11 @@ final class Not extends AbstractRule
         $this->rule->setName($name);
 
         return parent::setName($name);
+    }
+
+    public function getRule(): Validatable
+    {
+        return $this->rule;
     }
 
     /**
@@ -74,6 +82,17 @@ final class Not extends AbstractRule
         $exception->updateMode(ValidationException::MODE_NEGATIVE);
 
         throw $exception;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reportError($input, array $extraParams = []): ValidationException
+    {
+        $exception = $this->simplifyRule($this->rule)->reportError($input, $extraParams);
+        $exception->updateMode(ValidationException::MODE_NEGATIVE);
+
+        return $exception;
     }
 
     /**

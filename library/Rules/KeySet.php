@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ComponentException;
+use Respect\Validation\Helpers\CanSimplifyRule;
 use Respect\Validation\Validatable;
 use function array_key_exists;
 use function array_map;
 use function count;
-use function current;
 use function is_array;
 
 /**
@@ -29,6 +29,8 @@ use function is_array;
  */
 final class KeySet extends AbstractWrapper
 {
+    use CanSimplifyRule;
+
     /**
      * @var mixed[]
      */
@@ -93,16 +95,12 @@ final class KeySet extends AbstractWrapper
      */
     private function getKeyRule(Validatable $validatable): Key
     {
-        if ($validatable instanceof Key) {
-            return $validatable;
-        }
-
-        if (!$validatable instanceof AllOf
-            || count($validatable->getRules()) !== 1) {
+        $validatable = $this->simplifyRule($validatable);
+        if (!$validatable instanceof Key) {
             throw new ComponentException('KeySet rule accepts only Key rules');
         }
 
-        return $this->getKeyRule(current($validatable->getRules()));
+        return $validatable;
     }
 
     /**

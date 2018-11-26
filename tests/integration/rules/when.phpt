@@ -9,7 +9,6 @@ require 'vendor/autoload.php';
 
 use Respect\Validation\Exceptions\IntValException;
 use Respect\Validation\Exceptions\NestedValidationException;
-use Respect\Validation\Exceptions\WhenException;
 use Respect\Validation\Validator as v;
 
 try {
@@ -25,14 +24,14 @@ try {
 }
 
 try {
-    v::not(v::when(v::alwaysValid(), v::stringVal()))->check('ghi');
-} catch (WhenException $exception) {
+    v::not(v::when(v::alwaysValid(), v::not(v::intVal())))->check('ghi');
+} catch (IntValException $exception) {
     echo $exception->getMessage().PHP_EOL;
 }
 
 try {
-    v::not(v::when(v::alwaysInvalid(), v::alwaysValid(), v::stringVal()))->check('jkl');
-} catch (WhenException $exception) {
+    v::not(v::when(v::alwaysInvalid(), v::alwaysValid(), v::not(v::intVal())))->check('jkl');
+} catch (IntValException $exception) {
     echo $exception->getMessage().PHP_EOL;
 }
 
@@ -49,13 +48,13 @@ try {
 }
 
 try {
-    v::not(v::when(v::alwaysValid(), v::stringVal()))->assert('stu');
+    v::not(v::when(v::alwaysValid(), v::not(v::intVal())))->assert('stu');
 } catch (NestedValidationException $exception) {
     echo $exception->getFullMessage().PHP_EOL;
 }
 
 try {
-    v::not(v::when(v::alwaysInvalid(), v::alwaysValid(), v::stringVal()))->assert('vwx');
+    v::not(v::when(v::alwaysInvalid(), v::alwaysValid(), v::not(v::intVal())))->assert('vwx');
 } catch (NestedValidationException $exception) {
     echo $exception->getFullMessage().PHP_EOL;
 }
@@ -63,9 +62,9 @@ try {
 --EXPECT--
 "abc" must be an integer number
 "def" must be an integer number
-"ghi" must not be valid
-"jkl" must not be valid
+"ghi" must not be an integer number
+"jkl" must not be an integer number
 - "mno" must be an integer number
 - "pqr" must be an integer number
-- "stu" must not be valid
-- "vwx" must not be valid
+- "stu" must not be an integer number
+- "vwx" must not be an integer number

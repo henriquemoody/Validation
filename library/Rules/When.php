@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\AlwaysInvalidException;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Helpers\CanSimplifyRule;
 use Respect\Validation\Validatable;
 
 /**
@@ -26,6 +28,8 @@ use Respect\Validation\Validatable;
  */
 final class When extends AbstractRule
 {
+    use CanSimplifyRule;
+
     /**
      * @var Validatable
      */
@@ -91,5 +95,17 @@ final class When extends AbstractRule
         }
 
         $this->else->check($input);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reportError($input, array $extraParams = []): ValidationException
+    {
+        if ($this->when->validate($input)) {
+            return $this->simplifyRule($this->then)->reportError($input, $extraParams);
+        }
+
+        return $this->simplifyRule($this->else)->reportError($input, $extraParams);
     }
 }
