@@ -17,8 +17,9 @@ use Respect\Validation\Test\TestCase;
 use Respect\Validation\Validatable;
 
 /**
- * @group  rule
- * @covers \Respect\Validation\Exceptions\AllOfException
+ * @group rule
+ *
+ * @covers \Respect\Validation\Rules\AbstractComposite
  * @covers \Respect\Validation\Rules\AllOf
  *
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>

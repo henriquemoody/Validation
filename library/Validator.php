@@ -13,11 +13,16 @@ declare(strict_types=1);
 
 namespace Respect\Validation;
 
+use function array_shift;
 use finfo;
+use function parent;
 use Respect\Validation\Exceptions\ComponentException;
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Rules\AllOf;
+use Respect\Validation\Rules\AnyOf;
 use Respect\Validation\Rules\Key;
+use Respect\Validation\Rules\OneOf;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function count;
@@ -178,22 +183,90 @@ use function count;
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
-final class Validator extends AllOf
+final class Validator extends AbstractRule
 {
+    /**
+     * @var Factory
+     */
+    private $factory;
+
+    /**
+     * @var Validatable[]
+     */
+    private $rules = [];
+
+    public function __construct(Factory $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    public function addRule(Validatable $rule): void
+    {
+        $this->rules[] = $rule;
+    }
+
+    private function rule(): Validatable
+    {
+        $rule = new AllOf(...$this->rules);
+        if ($this->name !== null) {
+            $rule->setName($this->name);
+        }
+
+        if ($this->template !== null) {
+            $rule->setTemplate($this->template);
+        }
+
+        return $rule;
+    }
+
+    public function simplify(Validatable $rule): Validatable
+    {
+        if (!$rule instanceof AllOf) {
+            return $rule;
+        }
+
+        if (count($rule->getRules()) > 1) {
+            return $rule;
+        }
+
+        return $this->simplify($rule->getRules()[0]);
+    }
+
+    public function reportError($input, array $extraParams = []): ValidationException
+    {
+        return $this->rule()->reportError($input, $extraParams);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function assert($input): void
+    {
+        $this->rule()->assert($input);
+    }
+
     /**
      * {@inheritDoc}
      */
     public function check($input): void
     {
         try {
-            parent::check($input);
+            $this->simplify($this->rule())->check($input);
         } catch (ValidationException $exception) {
-            if (count($this->getRules()) == 1 && $this->template) {
+            if (count($this->rules) == 1 && $this->template) {
                 $exception->updateTemplate($this->template);
             }
 
             throw $exception;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validate($input): bool
+    {
+        return $this->rule()->validate($input);
     }
 
     /**
@@ -217,7 +290,7 @@ final class Validator extends AllOf
      */
     public function __call(string $ruleName, array $arguments): self
     {
-        $this->addRule(Factory::getDefaultInstance()->rule($ruleName, $arguments));
+        $this->addRule($this->factory->rule($ruleName, $arguments));
 
         return $this;
     }
@@ -227,6 +300,6 @@ final class Validator extends AllOf
      */
     public static function create(): self
     {
-        return new self();
+        return new self(Factory::getDefaultInstance());
     }
 }

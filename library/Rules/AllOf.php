@@ -20,7 +20,7 @@ use function count;
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
-class AllOf extends AbstractComposite
+final class AllOf extends AbstractComposite
 {
     /**
      * {@inheritDoc}

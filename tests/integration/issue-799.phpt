@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use Respect\Validation\Exceptions\AllOfException;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Test\Stubs\CountableStub;
 use Respect\Validation\Validator as v;
 
@@ -20,7 +20,7 @@ try {
             v::arrayVal()->key('scheme', v::startsWith('https'))
         )
         ->assert($input);
-} catch (AllOfException $exception) {
+} catch (NestedValidationException $exception) {
     echo $exception->getMessage().PHP_EOL;
 }
 
@@ -33,7 +33,7 @@ try {
             v::arrayVal()->key('scheme', v::startsWith('https'))
         )
         ->assert($input);
-} catch (AllOfException $exception) {
+} catch (NestedValidationException $exception) {
     echo $exception->getMessage().PHP_EOL;
 }
 ?>

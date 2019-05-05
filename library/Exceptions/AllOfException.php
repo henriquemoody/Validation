@@ -17,7 +17,7 @@ namespace Respect\Validation\Exceptions;
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
-class AllOfException extends GroupedValidationException
+final class AllOfException extends GroupedValidationException
 {
     /**
      * {@inheritDoc}

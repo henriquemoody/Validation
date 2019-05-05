@@ -16,8 +16,9 @@ namespace Respect\Validation\Rules;
 use Respect\Validation\Test\TestCase;
 
 /**
- * @group  rule
- * @covers \Respect\Validation\Exceptions\OneOfException
+ * @group rule
+ *
+ * @covers \Respect\Validation\Rules\AbstractComposite
  * @covers \Respect\Validation\Rules\OneOf
  *
  * @author Bradyn Poulsen <bradyn@bradynpoulsen.com>
