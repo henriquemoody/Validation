@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Henrique Moody <henriquemoody@gmail.com>
  * @author Ismael Elias <ismael.esq@hotmail.com>
@@ -24,10 +26,10 @@ final class NumberException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a number',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a number',
         ],
     ];

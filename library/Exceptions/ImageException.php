@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Danilo Benevides <danilobenevides01@gmail.com>
  * @author Guilherme Siani <guilherme@siani.com.br>
@@ -24,10 +26,10 @@ final class ImageException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a valid image',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a valid image',
         ],
     ];

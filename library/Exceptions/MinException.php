@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -25,10 +27,10 @@ final class MinException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be greater than or equal to {{compareTo}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be greater than or equal to {{compareTo}}',
         ],
     ];

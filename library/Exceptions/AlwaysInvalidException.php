@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -26,11 +28,11 @@ final class AlwaysInvalidException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} is always invalid',
             self::SIMPLE => '{{name}} is not valid',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} is always valid',
             self::SIMPLE => '{{name}} is valid',
         ],

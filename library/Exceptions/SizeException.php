@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * Exception class for Size rule.
  *
@@ -28,12 +30,12 @@ final class SizeException extends NestedValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::BOTH => '{{name}} must be between {{minSize}} and {{maxSize}}',
             self::LOWER => '{{name}} must be greater than {{minSize}}',
             self::GREATER => '{{name}} must be lower than {{maxSize}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::BOTH => '{{name}} must not be between {{minSize}} and {{maxSize}}',
             self::LOWER => '{{name}} must not be greater than {{minSize}}',
             self::GREATER => '{{name}} must not be lower than {{maxSize}}',

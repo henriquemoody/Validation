@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Rules;
 
-use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Message\Templates;
 use Respect\Validation\Validatable;
 use function array_shift;
 use function count;
@@ -71,7 +71,7 @@ final class Not extends AbstractRule
         }
 
         $exception = $rule->reportError($input);
-        $exception->updateMode(ValidationException::MODE_NEGATIVE);
+        $exception->updateMode(Templates::NEGATIVE);
 
         throw $exception;
     }

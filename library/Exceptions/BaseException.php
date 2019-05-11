@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Carlos André Ferrari <caferrari@gmail.com>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -24,10 +26,10 @@ final class BaseException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a number in the base {{base}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a number in the base {{base}}',
         ],
     ];

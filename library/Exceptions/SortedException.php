@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
 use Respect\Validation\Rules\Sorted;
 
 /**
@@ -28,11 +29,11 @@ final class SortedException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::ASCENDING => '{{name}} must be sorted in ascending order',
             self::DESCENDING => '{{name}} must be sorted in descending order',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::ASCENDING => '{{name}} must not be sorted in ascending order',
             self::DESCENDING => '{{name}} must not be sorted in descending order',
         ],

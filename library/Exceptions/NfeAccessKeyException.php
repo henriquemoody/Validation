@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Andrey Knupp Vital <andreykvital@gmail.com>
  * @author Danilo Correa <danilosilva87@gmail.com>
@@ -24,10 +26,10 @@ final class NfeAccessKeyException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a valid NFe access key',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a valid NFe access key',
         ],
     ];

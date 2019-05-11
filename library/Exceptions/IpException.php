@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Danilo Benevides <danilobenevides01@gmail.com>
@@ -27,11 +29,11 @@ final class IpException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be an IP address',
             self::NETWORK_RANGE => '{{name}} must be an IP address in the {{range}} range',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be an IP address',
             self::NETWORK_RANGE => '{{name}} must not be an IP address in the {{range}} range',
         ],

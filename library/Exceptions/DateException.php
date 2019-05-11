@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Bruno Luiz da Silva <contato@brunoluiz.net>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -23,10 +25,10 @@ final class DateException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a valid date in the format {{sample}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a valid date in the format {{sample}}',
         ],
     ];

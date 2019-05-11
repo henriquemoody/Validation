@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Danilo Correa <danilosilva87@gmail.com>
@@ -32,7 +34,7 @@ final class LengthException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::BOTH => '{{name}} must have a length between {{minValue}} and {{maxValue}}',
             self::LOWER => '{{name}} must have a length greater than {{minValue}}',
             self::LOWER_INCLUSIVE => '{{name}} must have a length greater than or equal to {{minValue}}',
@@ -40,7 +42,7 @@ final class LengthException extends ValidationException
             self::GREATER_INCLUSIVE => '{{name}} must have a length lower than or equal to {{maxValue}}',
             self::EXACT => '{{name}} must have a length of {{maxValue}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::BOTH => '{{name}} must not have a length between {{minValue}} and {{maxValue}}',
             self::LOWER => '{{name}} must not have a length greater than {{minValue}}',
             self::LOWER_INCLUSIVE => '{{name}} must not have a length greater than or equal to {{minValue}}',

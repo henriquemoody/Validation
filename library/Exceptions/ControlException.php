@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Andre Ramaciotti <andre@ramaciotti.com>
  * @author Danilo Correa <danilosilva87@gmail.com>
@@ -24,11 +26,11 @@ final class ControlException extends FilteredValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must contain only control characters',
             self::EXTRA => '{{name}} must contain only control characters and {{additionalChars}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not contain control characters',
             self::EXTRA => '{{name}} must not contain control characters or {{additionalChars}}',
         ],

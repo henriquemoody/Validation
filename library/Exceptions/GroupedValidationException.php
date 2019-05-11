@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
 use function count;
 
 /**
@@ -28,11 +29,11 @@ class GroupedValidationException extends NestedValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::NONE => 'All of the required rules must pass for {{name}}',
             self::SOME => 'These rules must pass for {{name}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::NONE => 'None of there rules must pass for {{name}}',
             self::SOME => 'These rules must not pass for {{name}}',
         ],

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Bradyn Poulsen <bradyn@bradynpoulsen.com>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -23,10 +25,10 @@ final class OneOfException extends NestedValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => 'Only one of these rules must pass for {{name}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => 'Only one of these rules must not pass for {{name}}',
         ],
     ];

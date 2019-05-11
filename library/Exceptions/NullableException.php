@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Henrique Moody <henriquemoody@gmail.com>
  * @author Jens Segers <segers.jens@gmail.com>
@@ -25,11 +27,11 @@ final class NullableException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => 'The value must be nullable',
             self::NAMED => '{{name}} must be nullable',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => 'The value must not be null',
             self::NAMED => '{{name}} must not be null',
         ],

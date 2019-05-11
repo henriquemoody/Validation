@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
 use Respect\Validation\Test\TestCase;
 use function trim;
 
@@ -99,7 +100,7 @@ final class ValidationExceptionTest extends TestCase
     public function itShouldUpdateMode(): void
     {
         $sut = new ValidationException('input', 'id', [], 'trim');
-        $sut->updateMode(ValidationException::MODE_NEGATIVE);
+        $sut->updateMode(Templates::NEGATIVE);
 
         self::assertSame('"input" must not be valid', $sut->getMessage());
     }

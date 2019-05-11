@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Dick van der Heiden <d.vanderheiden@inthere.nl>
  * @author Henrique Moody <henriquemoody@gmail.com>
@@ -26,11 +28,11 @@ final class UuidException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a valid UUID',
             self::VERSION => '{{name}} must be a valid UUID version {{version}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a valid UUID',
             self::VERSION => '{{name}} must not be a valid UUID version {{version}}',
         ],

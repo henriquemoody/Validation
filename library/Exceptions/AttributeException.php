@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * Exceptions to be thrown by the Attribute Rule.
  *
@@ -29,11 +31,11 @@ final class AttributeException extends NestedValidationException implements NonO
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::NOT_PRESENT => 'Attribute {{name}} must be present',
             self::INVALID => 'Attribute {{name}} must be valid',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::NOT_PRESENT => 'Attribute {{name}} must not be present',
             self::INVALID => 'Attribute {{name}} must not validate',
         ],

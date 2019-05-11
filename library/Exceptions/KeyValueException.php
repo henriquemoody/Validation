@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
@@ -24,11 +26,11 @@ final class KeyValueException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => 'Key {{name}} must be present',
             self::COMPONENT => '{{baseKey}} must be valid to validate {{comparedKey}}',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => 'Key {{name}} must not be present',
             self::COMPONENT => '{{baseKey}} must not be valid to validate {{comparedKey}}',
         ],

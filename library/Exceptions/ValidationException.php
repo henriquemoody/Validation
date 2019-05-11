@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Respect\Validation\Exceptions;
 
 use InvalidArgumentException;
+use Respect\Validation\Message\Template;
+use Respect\Validation\Message\Templates;
 use function call_user_func;
 use function is_string;
-use function key;
 use function preg_replace_callback;
 use function Respect\Stringifier\stringify;
 
@@ -28,8 +29,6 @@ use function Respect\Stringifier\stringify;
  */
 class ValidationException extends InvalidArgumentException implements Exception
 {
-    public const MODE_DEFAULT = 'default';
-    public const MODE_NEGATIVE = 'negative';
     public const STANDARD = 'standard';
 
     /**
@@ -38,10 +37,10 @@ class ValidationException extends InvalidArgumentException implements Exception
      * @var string[][]
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be valid',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be valid',
         ],
     ];
@@ -59,7 +58,7 @@ class ValidationException extends InvalidArgumentException implements Exception
     /**
      * @var string
      */
-    private $mode = self::MODE_DEFAULT;
+    private $mode = Templates::REGULAR;
 
     /**
      * @var mixed[]
@@ -77,6 +76,11 @@ class ValidationException extends InvalidArgumentException implements Exception
     private $template;
 
     /**
+     * @var Templates
+     */
+    private $templates;
+
+    /**
      * @param mixed $input
      * @param mixed[] $params
      */
@@ -86,6 +90,7 @@ class ValidationException extends InvalidArgumentException implements Exception
         $this->id = $id;
         $this->params = $params;
         $this->translator = $translator;
+        $this->templates = $this->createTemplates();
         $this->template = $this->chooseTemplate();
 
         parent::__construct($this->createMessage());
@@ -135,7 +140,7 @@ class ValidationException extends InvalidArgumentException implements Exception
 
     public function hasCustomTemplate(): bool
     {
-        return isset($this->defaultTemplates[$this->mode][$this->template]) === false;
+        return $this->templates->getTemplate($this->mode, $this->template) === null;
     }
 
     public function __toString(): string
@@ -145,7 +150,22 @@ class ValidationException extends InvalidArgumentException implements Exception
 
     protected function chooseTemplate(): string
     {
-        return (string) key($this->defaultTemplates[$this->mode]);
+        return $this->templates->getDefaultTemplate($this->mode)->getId();
+    }
+
+    private function createTemplates(): Templates
+    {
+        $regular = [];
+        foreach ($this->defaultTemplates[Templates::REGULAR] as $id => $message) {
+            $regular[] = new Template($message, $id);
+        }
+
+        $negative = [];
+        foreach ($this->defaultTemplates[Templates::NEGATIVE] as $id => $message) {
+            $negative[] = new Template($message, $id);
+        }
+
+        return new Templates($regular, $negative);
     }
 
     private function createMessage(): string
@@ -158,13 +178,14 @@ class ValidationException extends InvalidArgumentException implements Exception
         return $this->format($template, $params);
     }
 
-    private function createTemplate(string $mode, string $template): string
+    private function createTemplate(string $mode, string $id): string
     {
-        if (isset($this->defaultTemplates[$mode][$template])) {
-            $template = $this->defaultTemplates[$mode][$template];
+        $template = $this->templates->getTemplate($mode, $id);
+        if ($template === null) {
+            $template = new Template($id);
         }
 
-        return call_user_func($this->translator, $template);
+        return call_user_func($this->translator, $template->getMessage());
     }
 
     /**

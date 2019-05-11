@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
 use Respect\Validation\Rules\CreditCard;
 
 /**
@@ -28,11 +29,11 @@ final class CreditCardException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => '{{name}} must be a valid Credit Card number',
             self::BRANDED => '{{name}} must be a valid {{brand}} Credit Card number',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => '{{name}} must not be a valid Credit Card number',
             self::BRANDED => '{{name}} must not be a valid {{brand}} Credit Card number',
         ],

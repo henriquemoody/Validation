@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Exceptions;
 
+use Respect\Validation\Message\Templates;
+
 /**
  * @author Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
  * @author Bram Van der Sype <bram.vandersype@gmail.com>
@@ -26,11 +28,11 @@ final class NotEmptyException extends ValidationException
      * {@inheritDoc}
      */
     protected $defaultTemplates = [
-        self::MODE_DEFAULT => [
+        Templates::REGULAR => [
             self::STANDARD => 'The value must not be empty',
             self::NAMED => '{{name}} must not be empty',
         ],
-        self::MODE_NEGATIVE => [
+        Templates::NEGATIVE => [
             self::STANDARD => 'The value must be empty',
             self::NAMED => '{{name}} must be empty',
         ],
