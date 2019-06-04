@@ -15,8 +15,8 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ComponentException;
 use Respect\Validation\Exceptions\ValidationException;
-use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
+use Respect\Validation\Validator;
 use function array_keys;
 use function in_array;
 
@@ -119,7 +119,7 @@ final class KeyValue extends AbstractRule
         }
 
         try {
-            $rule = Factory::getDefaultInstance()->rule($this->ruleName, [$input[$this->baseKey]]);
+            $rule = Validator::getDefaultFactory()->rule($this->ruleName, [$input[$this->baseKey]]);
             $rule->setName($this->comparedKey);
         } catch (ComponentException $exception) {
             throw parent::reportError($input, ['component' => true]);

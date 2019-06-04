@@ -63,7 +63,7 @@ Validation to execute your rule (or rules) in the chain, you must overwrite the
 default `Factory`.
 
 ```php
-Factory::setDefaultInstance(
+v::setDefaultFactory(
     (new Factory())
         ->withRuleNamespace('My\\Validation\\Rules')
         ->withExceptionNamespace('My\\Validation\\Exceptions')

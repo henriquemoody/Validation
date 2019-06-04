@@ -13,7 +13,8 @@ It is possible to overwrite that behavior by creating a custom implementation of
 the `ParameterStringifier` and passing it to the `Factory`:
 
 ```php
-Factory::setDefaultInstance(
-    (new Factory())->withParameterStringifier(new MyCustomStringifier())
+v::setDefaultFactory(
+    (new Factory())
+        ->withParameterStringifier(new MyCustomStringifier())
 );
 ```

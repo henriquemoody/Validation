@@ -202,28 +202,4 @@ final class FactoryTest extends TestCase
 
         self::assertSame($extraParams['template'], $exception->getMessage());
     }
-
-    /**
-     * @test
-     */
-    public function shouldAlwaysReturnTheSameDefaultInstance(): void
-    {
-        self::assertSame(Factory::getDefaultInstance(), Factory::getDefaultInstance());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeAbleToOverwriteDefaultInstance(): void
-    {
-        $factory = new Factory();
-
-        $defaultInstance = Factory::getDefaultInstance();
-
-        Factory::setDefaultInstance($factory);
-
-        self::assertSame($factory, Factory::getDefaultInstance());
-
-        Factory::setDefaultInstance($defaultInstance);
-    }
 }

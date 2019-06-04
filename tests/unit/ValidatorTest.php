@@ -54,4 +54,28 @@ final class ValidatorTest extends TestCase
 
         self::assertSame($validator, $validator->not($validator->notEmpty()));
     }
+
+    /**
+     * @test
+     */
+    public function shouldAlwaysReturnTheSameDefaultFactory(): void
+    {
+        self::assertSame(Validator::getDefaultFactory(), Validator::getDefaultFactory());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeAbleToOverwriteDefaultFactory(): void
+    {
+        $factory = new Factory();
+
+        $defaultFactory = Validator::getDefaultFactory();
+
+        Validator::setDefaultFactory($factory);
+
+        self::assertSame($factory, Validator::getDefaultFactory());
+
+        Validator::setDefaultFactory($defaultFactory);
+    }
 }

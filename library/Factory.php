@@ -36,13 +36,6 @@ use function ucfirst;
 final class Factory
 {
     /**
-     * Default instance of the Factory.
-     *
-     * @var Factory
-     */
-    private static $defaultInstance;
-
-    /**
      * @var string[]
      */
     private $rulesNamespaces = ['Respect\\Validation\\Rules'];
@@ -97,26 +90,6 @@ final class Factory
         $clone->parameterStringifier = $parameterStringifier;
 
         return $clone;
-    }
-
-    /**
-     * Define the default instance of the Factory.
-     */
-    public static function setDefaultInstance(self $defaultInstance): void
-    {
-        self::$defaultInstance = $defaultInstance;
-    }
-
-    /**
-     * Returns the default instance of the Factory.
-     */
-    public static function getDefaultInstance(): self
-    {
-        if (self::$defaultInstance === null) {
-            self::$defaultInstance = new self();
-        }
-
-        return self::$defaultInstance;
     }
 
     /**

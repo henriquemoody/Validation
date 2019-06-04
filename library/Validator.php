@@ -181,6 +181,25 @@ use function count;
 final class Validator extends AllOf
 {
     /**
+     * @var Factory
+     */
+    private static $defaultFactory;
+
+    public static function setDefaultFactory(Factory $factory): void
+    {
+        self::$defaultFactory = $factory;
+    }
+
+    public static function getDefaultFactory(): Factory
+    {
+        if (self::$defaultFactory === null) {
+            self::$defaultFactory = new Factory();
+        }
+
+        return self::$defaultFactory;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function check($input): void
@@ -217,7 +236,7 @@ final class Validator extends AllOf
      */
     public function __call(string $ruleName, array $arguments): self
     {
-        $this->addRule(Factory::getDefaultInstance()->rule($ruleName, $arguments));
+        $this->addRule(self::getDefaultFactory()->rule($ruleName, $arguments));
 
         return $this;
     }

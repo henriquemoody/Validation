@@ -5,7 +5,7 @@ The only thing one must do is to define the param `translator` as a callable tha
 will handle the translation overwriting the default factory:
 
 ```php
-Factory::setDefaultInstance(
+v::setDefaultFactory(
     (new Factory())->withTranslator('gettext')
 );
 ```

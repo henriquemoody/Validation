@@ -11,7 +11,7 @@ use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Factory;
 use Respect\Validation\Validator;
 
-Factory::setDefaultInstance(
+Validator::setDefaultFactory(
     (new Factory())
         ->withTranslator(static function (string $message): string {
             return [
