@@ -63,8 +63,8 @@ something complex and returns for you.
 
 > I really don't like static calls, can I avoid it?
 
-Yes. Just use `$validator = new Validator();` each time you want a new validator,
-and continue from there.
+Yes. Just use `$validator = new Validator($factory);` each time you want a new
+validator, and continue from there.
 
 > Do you have a static method for each rule?
 

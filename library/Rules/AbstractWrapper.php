@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Rules;
 
+use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
 
 /**
@@ -68,5 +69,15 @@ abstract class AbstractWrapper extends AbstractRule
         $this->validatable->setName($name);
 
         return parent::setName($name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFactory(Factory $factory): Validatable
+    {
+        $this->validatable->setFactory($factory);
+
+        return parent::setFactory($factory);
     }
 }

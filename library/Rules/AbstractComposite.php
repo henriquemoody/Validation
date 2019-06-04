@@ -15,6 +15,7 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
 use function array_filter;
 use function array_map;
@@ -59,6 +60,15 @@ abstract class AbstractComposite extends AbstractRule
         return parent::setName($name);
     }
 
+    public function setFactory(Factory $factory): Validatable
+    {
+        foreach ($this->rules as $rule) {
+            $rule->setFactory($factory);
+        }
+
+        return parent::setFactory($factory);
+    }
+
     /**
      * Append a rule into the stack of rules.
      *
@@ -66,6 +76,7 @@ abstract class AbstractComposite extends AbstractRule
      */
     public function addRule(Validatable $rule): self
     {
+        $rule->setFactory($this->getFactory());
         if ($this->shouldHaveNameOverwritten($rule)) {
             $rule->setName($this->getName());
         }

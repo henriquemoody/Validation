@@ -73,12 +73,6 @@ abstract class RuleTestCase extends TestCase
     public function createValidatableMock(bool $expectedResult, string $mockClassName = ''): Validatable
     {
         $validatableMocked = $this->getMockBuilder(Validatable::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'assert', 'check', 'getName', 'reportError', 'setName', 'setTemplate', 'validate',
-                ]
-            )
             ->setMockClassName($mockClassName)
             ->getMock();
 

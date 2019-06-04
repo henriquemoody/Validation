@@ -44,6 +44,8 @@ interface Validatable
 
     public function setTemplate(string $template): Validatable;
 
+    public function setFactory(Factory $factory): Validatable;
+
     /**
      * @param mixed $input
      */

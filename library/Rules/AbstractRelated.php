@@ -15,6 +15,7 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
 use function is_scalar;
 
@@ -154,5 +155,17 @@ abstract class AbstractRelated extends AbstractRule
         }
 
         return $this->rule->validate($this->getReferenceValue($input));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFactory(Factory $factory): Validatable
+    {
+        if ($this->rule !== null) {
+            $this->rule->setFactory($factory);
+        }
+
+        return parent::setFactory($factory);
     }
 }

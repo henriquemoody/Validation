@@ -185,6 +185,13 @@ final class Validator extends AllOf
      */
     private static $defaultFactory;
 
+    public function __construct(Factory $factory, Validatable ...$rules)
+    {
+        parent::__construct(...$rules);
+
+        $this->setFactory($factory);
+    }
+
     public static function setDefaultFactory(Factory $factory): void
     {
         self::$defaultFactory = $factory;
@@ -246,6 +253,6 @@ final class Validator extends AllOf
      */
     public static function create(): self
     {
-        return new self();
+        return new self(self::getDefaultFactory());
     }
 }

@@ -107,6 +107,7 @@ final class Factory
                 $rule = $this
                     ->createReflectionClass($namespace.'\\'.ucfirst($ruleName), Validatable::class)
                     ->newInstanceArgs($arguments);
+                $rule->setFactory($this);
 
                 return $rule;
             } catch (ReflectionException $exception) {

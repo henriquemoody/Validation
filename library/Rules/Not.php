@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
 use function array_shift;
 use function count;
@@ -74,6 +75,16 @@ final class Not extends AbstractRule
         $exception->updateMode(ValidationException::MODE_NEGATIVE);
 
         throw $exception;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFactory(Factory $factory): Validatable
+    {
+        $this->getNegatedRule()->setFactory($factory);
+
+        return parent::setFactory($factory);
     }
 
     /**

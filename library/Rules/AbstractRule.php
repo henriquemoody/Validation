@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Factory;
 use Respect\Validation\Validatable;
 use Respect\Validation\Validator;
 
@@ -34,6 +35,11 @@ abstract class AbstractRule implements Validatable
      * @var string|null
      */
     protected $template;
+
+    /**
+     * @var Factory
+     */
+    private $factory;
 
     /**
      * @param mixed$input
@@ -76,7 +82,7 @@ abstract class AbstractRule implements Validatable
      */
     public function reportError($input, array $extraParams = []): ValidationException
     {
-        return Validator::getDefaultFactory()->exception($this, $input, $extraParams);
+        return $this->getFactory()->exception($this, $input, $extraParams);
     }
 
     /**
@@ -97,5 +103,24 @@ abstract class AbstractRule implements Validatable
         $this->template = $template;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFactory(Factory $factory): Validatable
+    {
+        $this->factory = $factory;
+
+        return $this;
+    }
+
+    protected function getFactory(): Factory
+    {
+        if ($this->factory !== null) {
+            return $this->factory;
+        }
+
+        return Validator::getDefaultFactory();
     }
 }

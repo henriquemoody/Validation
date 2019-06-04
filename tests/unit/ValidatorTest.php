@@ -50,7 +50,7 @@ final class ValidatorTest extends TestCase
      */
     public function shouldReturnValidatorInstanceWhenTheNotRuleIsCalledWithArguments(): void
     {
-        $validator = new Validator();
+        $validator = new Validator(new Factory());
 
         self::assertSame($validator, $validator->not($validator->notEmpty()));
     }

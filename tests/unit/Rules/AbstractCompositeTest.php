@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Rules;
 
+use Respect\Validation\Test\Rules\Stub;
 use Respect\Validation\Test\TestCase;
 use Respect\Validation\Validatable;
 
@@ -61,31 +62,18 @@ final class AbstractCompositeTest extends TestCase
         $ruleName1 = 'something';
         $ruleName2 = 'something else';
 
-        $rule = $this->createMock(Validatable::class);
-        $rule
-            ->expects(self::at(0))
-            ->method('getName')
-            ->will(self::returnValue(null));
-        $rule
-            ->expects(self::at(2))
-            ->method('getName')
-            ->will(self::returnValue($ruleName1));
-        $rule
-            ->expects(self::at(1))
-            ->method('setName')
-            ->with($ruleName1);
-        $rule
-            ->expects(self::at(3))
-            ->method('setName')
-            ->with($ruleName2);
+        $rule = new Stub();
 
         $sut = $this
             ->getMockBuilder(AbstractComposite::class)
             ->setMethods(['validate'])
             ->getMockForAbstractClass();
+
         $sut->setName($ruleName1);
         $sut->addRule($rule);
         $sut->setName($ruleName2);
+
+        self::assertEquals($ruleName2, $rule->getName());
     }
 
     /**
