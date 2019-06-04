@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
+use Respect\Validation\ConfigurableFactory;
 use Respect\Validation\Exceptions\ValidationException;
-use Respect\Validation\Factory;
 use Respect\Validation\Validator;
 
 Validator::setDefaultFactory(
-    (new Factory())
+    (new ConfigurableFactory())
         ->withTranslator(static function (string $message): string {
             return [
                 '{{name}} must be of type string' => '{{name}} deve ser do tipo string',

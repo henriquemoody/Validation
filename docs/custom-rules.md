@@ -64,7 +64,7 @@ default `Factory`.
 
 ```php
 v::setDefaultFactory(
-    (new Factory())
+    (new ConfigurableFactory())
         ->withRuleNamespace('My\\Validation\\Rules')
         ->withExceptionNamespace('My\\Validation\\Exceptions')
 );

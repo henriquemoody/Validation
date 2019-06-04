@@ -31,7 +31,7 @@ use function sprintf;
  * @author Gabriel Caruso <carusogabriel34@gmail.com>
  * @author Henrique Moody <henriquemoody@gmail.com>
  */
-final class FactoryTest extends TestCase
+final class ConfigurableFactoryTest extends TestCase
 {
     private const TEST_RULES_NAMESPACE = 'Respect\\Validation\\Test\\Rules';
     private const TEST_EXCEPTIONS_NAMESPACE = 'Respect\\Validation\\Test\\Exceptions';
@@ -41,7 +41,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldCreateRuleByNameBasedOnNamespace(): void
     {
-        $factory = (new Factory())
+        $factory = (new ConfigurableFactory())
             ->withRuleNamespace(self::TEST_RULES_NAMESPACE);
 
         self::assertInstanceOf(Valid::class, $factory->rule('valid'));
@@ -52,7 +52,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldLookUpToAllNamespacesUntilRuleIsFound(): void
     {
-        $factory = (new Factory())
+        $factory = (new ConfigurableFactory())
             ->withRuleNamespace(__NAMESPACE__)
             ->withRuleNamespace(self::TEST_RULES_NAMESPACE);
 
@@ -66,7 +66,7 @@ final class FactoryTest extends TestCase
     {
         $constructorArguments = [true, false, true, false];
 
-        $factory = (new Factory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
         /** @var Stub $rule */
         $rule = $factory->rule('stub', $constructorArguments);
 
@@ -78,7 +78,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldThrowsAnExceptionWhenRuleIsInvalid(): void
     {
-        $factory = (new Factory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
 
         $this->expectException(InvalidClassException::class);
         $this->expectExceptionMessage(sprintf('"%s" must be an instance of "%s"', Invalid::class, Validatable::class));
@@ -91,7 +91,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldThrowsAnExceptionWhenRuleIsNotInstantiable(): void
     {
-        $factory = (new Factory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
 
         $this->expectException(InvalidClassException::class);
         $this->expectExceptionMessage(sprintf('"%s" must be instantiable', AbstractClass::class));
@@ -104,7 +104,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldThrowsAnExceptionWhenRuleIsNotFound(): void
     {
-        $factory = (new Factory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withRuleNamespace(self::TEST_RULES_NAMESPACE);
 
         $this->expectException(ComponentException::class);
         $this->expectExceptionMessage('"notFoundRule" is not a valid rule name');
@@ -117,7 +117,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldCreateExceptionBasedOnRule(): void
     {
-        $factory = (new Factory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
 
         $rule = new Stub();
         $input = 2;
@@ -130,7 +130,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldLookUpToAllNamespacesUntilExceptionIsCreated(): void
     {
-        $factory = (new Factory())
+        $factory = (new ConfigurableFactory())
             ->withExceptionNamespace(__NAMESPACE__)
             ->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
 
@@ -145,7 +145,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldCreateValidationExceptionWhenExceptionIsNotFound(): void
     {
-        $factory = new Factory();
+        $factory = new ConfigurableFactory();
         $input = 'input';
         $rule = new Stub();
 
@@ -157,7 +157,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldSetInputAsParameterOfCreatedException(): void
     {
-        $factory = (new Factory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
 
         $rule = new Stub();
         $input = 2;
@@ -172,7 +172,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldPassPropertiesToCreatedException(): void
     {
-        $factory = (new Factory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
 
         $validations = [true, false, true, true];
         $rule = new Stub(...$validations);
@@ -188,7 +188,7 @@ final class FactoryTest extends TestCase
      */
     public function shouldSetTemplateWhenTemplateKeyIsDefined(): void
     {
-        $factory = (new Factory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
+        $factory = (new ConfigurableFactory())->withExceptionNamespace(self::TEST_EXCEPTIONS_NAMESPACE);
 
         $extraParams = [
             'template' => 'This is my template',
@@ -201,5 +201,29 @@ final class FactoryTest extends TestCase
         $exception = $factory->exception($rule, $input, $extraParams);
 
         self::assertSame($extraParams['template'], $exception->getMessage());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAlwaysReturnTheSameDefaultInstance(): void
+    {
+        self::assertSame(Validator::getDefaultFactory(), Validator::getDefaultFactory());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeAbleToOverwriteDefaultInstance(): void
+    {
+        $factory = new ConfigurableFactory();
+
+        $defaultInstance = Validator::getDefaultFactory();
+
+        Validator::setDefaultFactory($factory);
+
+        self::assertSame($factory, Validator::getDefaultFactory());
+
+        Validator::setDefaultFactory($defaultInstance);
     }
 }

@@ -200,7 +200,7 @@ final class Validator extends AllOf
     public static function getDefaultFactory(): Factory
     {
         if (self::$defaultFactory === null) {
-            self::$defaultFactory = new Factory();
+            self::$defaultFactory = new ConfigurableFactory();
         }
 
         return self::$defaultFactory;

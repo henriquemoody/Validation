@@ -6,7 +6,7 @@ will handle the translation overwriting the default factory:
 
 ```php
 v::setDefaultFactory(
-    (new Factory())->withTranslator('gettext')
+    (new ConfigurableFactory())->withTranslator('gettext')
 );
 ```
 

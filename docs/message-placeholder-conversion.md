@@ -14,7 +14,7 @@ the `ParameterStringifier` and passing it to the `Factory`:
 
 ```php
 v::setDefaultFactory(
-    (new Factory())
+    (new ConfigurableFactory())
         ->withParameterStringifier(new MyCustomStringifier())
 );
 ```
