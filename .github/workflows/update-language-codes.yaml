@@ -1,0 +1,30 @@
+name: Scheduled language code update
+
+on:
+  schedule:
+    - cron:  '12 * * * *'
+
+jobs:
+  update-language-codes:
+    name: Update language code
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "2.0"
+
+      - name: Execute updater
+        run: bin/update-language-codes
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          committer: The Respect Panda <therespectpanda@gmail.com>
+          author: The Respect Panda <therespectpanda@gmail.com>
+          commit-message: Update list of language codes
+          title: Update list of language codes
+          base: "2.0"
+          branch: "update-language-codes"
