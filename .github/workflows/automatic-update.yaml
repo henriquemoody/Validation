@@ -1,0 +1,46 @@
+name: Automatic update
+
+on:
+  schedule:
+    - cron:  '15 * * * *'
+
+jobs:
+  update-data:
+    name: Run automatic updater
+
+    strategy:
+      matrix:
+        values:
+          - script: bin/update-currency-codes
+            branch: automatic-update/update-currency-codes
+            message: "Update list of currency codes"
+            dependencies: bash xmlstarlet
+
+          - script: bin/update-language-codes
+            branch: automatic-update/update-language-codes
+            message: "Update list of language codes"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - if: matrix.values.dependencies
+        name: Install dependencies
+        run: sudo apt-get install ${{ matrix.values.dependencies }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "2.0"
+
+      - name: Execute script
+        run: ${{ matrix.values.script }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          committer: The Respect Panda <therespectpanda@gmail.com>
+          author: The Respect Panda <therespectpanda@gmail.com>
+          commit-message: ${{ matrix.values.message }}
+          title: ${{ matrix.values.message }}
+          base: "2.0"
+          branch: "${{ matrix.values.branch }}"
