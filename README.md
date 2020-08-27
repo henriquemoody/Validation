@@ -1,6 +1,6 @@
 # Respect\Validation
 
-[![Build Status](https://img.shields.io/travis/Respect/Validation/master.svg?style=flat-square)](http://travis-ci.org/Respect/Validation)
+[![Build Status](https://img.shields.io/github/workflow/status/Respect/Validation/Continuous%20Integration/master?style=flat-square)](https://github.com/Respect/Validation/actions?query=workflow%3A%22Continuous+Integration%22)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/Respect/Validation/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/Respect/Validation/?branch=master)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/Respect/Validation/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/Respect/Validation/?branch=master)
 [![Latest Stable Version](https://img.shields.io/packagist/v/respect/validation.svg?style=flat-square)](https://packagist.org/packages/respect/validation)
