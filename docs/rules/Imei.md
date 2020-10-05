@@ -28,5 +28,6 @@ See also:
 - [Cpf](Cpf.md)
 - [Isbn](Isbn.md)
 - [Luhn](Luhn.md)
+- [MethodExists](MethodExists.md)
 
 [IMEI]: https://en.wikipedia.org/wiki/International_Mobile_Station_Equipment_Identity "International Mobile Station Equipment Identity"

@@ -38,6 +38,7 @@ See also:
 - [Cnh](Cnh.md)
 - [Cnpj](Cnpj.md)
 - [Imei](Imei.md)
+- [MethodExists](MethodExists.md)
 - [NfeAccessKey](NfeAccessKey.md)
 - [Nif](Nif.md)
 - [Pis](Pis.md)

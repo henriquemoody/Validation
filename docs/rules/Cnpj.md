@@ -22,6 +22,7 @@ See also:
 - [Cnh](Cnh.md)
 - [Cpf](Cpf.md)
 - [Imei](Imei.md)
+- [MethodExists](MethodExists.md)
 - [NfeAccessKey](NfeAccessKey.md)
 - [Nif](Nif.md)
 - [Pis](Pis.md)

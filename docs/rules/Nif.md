@@ -26,4 +26,8 @@ See also:
 - [Cnh](Cnh.md)
 - [Cnpj](Cnpj.md)
 - [Cpf](Cpf.md)
+<<<<<<< HEAD
 - [PortugueseNif](PortugueseNif.md)
+=======
+- [MethodExists](MethodExists.md)
+>>>>>>> 9388fff0 (introspection)
