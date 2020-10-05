@@ -26,3 +26,4 @@ See also:
 - [Cnh](Cnh.md)
 - [Cnpj](Cnpj.md)
 - [Cpf](Cpf.md)
+- [MethodExists](MethodExists.md)

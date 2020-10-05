@@ -127,6 +127,12 @@
 - [Url](rules/Url.md)
 - [VideoUrl](rules/VideoUrl.md)
 
+## Introspection
+
+- [Attribute](rules/Attribute.md)
+- [Instance](rules/Instance.md)
+- [MethodExists](rules/MethodExists.md)
+
 ## Localization
 
 - [CountryCode](rules/CountryCode.md)
@@ -353,6 +359,7 @@
 - [MacAddress](rules/MacAddress.md)
 - [Max](rules/Max.md)
 - [MaxAge](rules/MaxAge.md)
+- [MethodExists](rules/MethodExists.md)
 - [Mimetype](rules/Mimetype.md)
 - [Min](rules/Min.md)
 - [MinAge](rules/MinAge.md)

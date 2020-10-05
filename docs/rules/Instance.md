@@ -14,6 +14,7 @@ Message template for this validator includes `{{instanceName}}`.
 ## Categorization
 
 - Objects
+- Introspection
 
 ## Changelog
 

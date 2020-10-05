@@ -32,6 +32,7 @@ The name of this validator is automatically set to the attribute name.
 - Nesting
 - Objects
 - Structures
+- Introspection
 
 ## Changelog
 
