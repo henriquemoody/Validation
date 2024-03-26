@@ -28,6 +28,7 @@ use Respect\Validation\Mixins\StaticUndefOr;
 use Respect\Validation\Rules\NullOr;
 use Respect\Validation\Rules\UndefOr;
 use Respect\Validation\Validatable;
+use Respect\Validation\Validator;
 
 function addMethodToInterface(
     string $originalName,
@@ -46,7 +47,10 @@ function addMethodToInterface(
     }
 
     $name = $prefix ? $prefix . ucfirst($originalName) : lcfirst($originalName);
-    $method = $interfaceType->addMethod($name)->setPublic()->setReturnType(ChainedValidator::class);
+    $method = $interfaceType
+        ->addMethod($name)
+        ->setPublic()
+        ->setReturnType(ChainedValidator::class . '&' . Validator::class);
     if (str_starts_with($interfaceType->getName(), 'Static')) {
         $method->setStatic();
     }
@@ -125,7 +129,7 @@ function overwriteFile(string $content, string $basename): void
 {
     file_put_contents(sprintf('%s/../library/Mixins/%s.php', __DIR__, $basename), implode(PHP_EOL . PHP_EOL, [
         '<?php',
-        file_get_contents(__DIR__.'/../.docheader'),
+        file_get_contents(__DIR__ . '/../.docheader'),
         'declare(strict_types=1);',
         preg_replace('/extends (.+, )+/', 'extends' . PHP_EOL . '\1', $content),
     ]));
@@ -206,14 +210,15 @@ function overwriteFile(string $content, string $basename): void
     foreach ($mixins as [$name, $prefix, $allowList, $denyList]) {
         $chainedNamespace = new PhpNamespace('Respect\\Validation\\Mixins');
         $chainedNamespace->addUse(Validatable::class);
+        $chainedNamespace->addUse(Validator::class);
         $chainedInterface = $chainedNamespace->addInterface('Chained' . $name);
 
         $staticNamespace = new PhpNamespace('Respect\\Validation\\Mixins');
         $staticNamespace->addUse(Validatable::class);
+        $staticNamespace->addUse(Validator::class);
         $staticInterface = $staticNamespace->addInterface('Static' . $name);
 
         if ($name === 'Validator') {
-            $chainedInterface->addExtend(Validatable::class);
             $chainedInterface->addExtend(ChainedKey::class);
             $chainedInterface->addExtend(ChainedLength::class);
             $chainedInterface->addExtend(ChainedMax::class);

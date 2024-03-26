@@ -10,348 +10,372 @@ declare(strict_types=1);
 namespace Respect\Validation\Mixins;
 
 use Respect\Validation\Validatable;
+use Respect\Validation\Validator;
 
 interface ChainedUndefOr
 {
-    public function undefOrAllOf(Validatable $rule1, Validatable $rule2, Validatable ...$rules): ChainedValidator;
+    public function undefOrAllOf(
+        Validatable $rule1,
+        Validatable $rule2,
+        Validatable ...$rules,
+    ): ChainedValidator&Validator;
 
-    public function undefOrAlnum(string ...$additionalChars): ChainedValidator;
+    public function undefOrAlnum(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrAlpha(string ...$additionalChars): ChainedValidator;
+    public function undefOrAlpha(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrAlwaysInvalid(): ChainedValidator;
+    public function undefOrAlwaysInvalid(): ChainedValidator&Validator;
 
-    public function undefOrAlwaysValid(): ChainedValidator;
+    public function undefOrAlwaysValid(): ChainedValidator&Validator;
 
-    public function undefOrAnyOf(Validatable $rule1, Validatable $rule2, Validatable ...$rules): ChainedValidator;
+    public function undefOrAnyOf(
+        Validatable $rule1,
+        Validatable $rule2,
+        Validatable ...$rules,
+    ): ChainedValidator&Validator;
 
-    public function undefOrArrayType(): ChainedValidator;
+    public function undefOrArrayType(): ChainedValidator&Validator;
 
-    public function undefOrArrayVal(): ChainedValidator;
+    public function undefOrArrayVal(): ChainedValidator&Validator;
 
     public function undefOrBase(
         int $base,
         string $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    ): ChainedValidator;
+    ): ChainedValidator&Validator;
 
-    public function undefOrBase64(): ChainedValidator;
+    public function undefOrBase64(): ChainedValidator&Validator;
 
-    public function undefOrBetween(mixed $minValue, mixed $maxValue): ChainedValidator;
+    public function undefOrBetween(mixed $minValue, mixed $maxValue): ChainedValidator&Validator;
 
-    public function undefOrBetweenExclusive(mixed $minimum, mixed $maximum): ChainedValidator;
+    public function undefOrBetweenExclusive(mixed $minimum, mixed $maximum): ChainedValidator&Validator;
 
-    public function undefOrBoolType(): ChainedValidator;
+    public function undefOrBoolType(): ChainedValidator&Validator;
 
-    public function undefOrBoolVal(): ChainedValidator;
+    public function undefOrBoolVal(): ChainedValidator&Validator;
 
-    public function undefOrBsn(): ChainedValidator;
+    public function undefOrBsn(): ChainedValidator&Validator;
 
-    public function undefOrCall(callable $callable, Validatable $rule): ChainedValidator;
+    public function undefOrCall(callable $callable, Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrCallableType(): ChainedValidator;
+    public function undefOrCallableType(): ChainedValidator&Validator;
 
-    public function undefOrCallback(callable $callback, mixed ...$arguments): ChainedValidator;
+    public function undefOrCallback(callable $callback, mixed ...$arguments): ChainedValidator&Validator;
 
-    public function undefOrCharset(string $charset, string ...$charsets): ChainedValidator;
+    public function undefOrCharset(string $charset, string ...$charsets): ChainedValidator&Validator;
 
-    public function undefOrCnh(): ChainedValidator;
+    public function undefOrCnh(): ChainedValidator&Validator;
 
-    public function undefOrCnpj(): ChainedValidator;
+    public function undefOrCnpj(): ChainedValidator&Validator;
 
     public function undefOrConsecutive(
         Validatable $rule1,
         Validatable $rule2,
         Validatable ...$rules,
-    ): ChainedValidator;
+    ): ChainedValidator&Validator;
 
-    public function undefOrConsonant(string ...$additionalChars): ChainedValidator;
+    public function undefOrConsonant(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrContains(mixed $containsValue, bool $identical = false): ChainedValidator;
+    public function undefOrContains(mixed $containsValue, bool $identical = false): ChainedValidator&Validator;
 
     /**
      * @param non-empty-array<mixed> $needles
      */
-    public function undefOrContainsAny(array $needles, bool $identical = false): ChainedValidator;
+    public function undefOrContainsAny(array $needles, bool $identical = false): ChainedValidator&Validator;
 
-    public function undefOrControl(string ...$additionalChars): ChainedValidator;
+    public function undefOrControl(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrCountable(): ChainedValidator;
+    public function undefOrCountable(): ChainedValidator&Validator;
 
     /**
      * @param "alpha-2"|"alpha-3"|"numeric" $set
      */
-    public function undefOrCountryCode(string $set = 'alpha-2'): ChainedValidator;
+    public function undefOrCountryCode(string $set = 'alpha-2'): ChainedValidator&Validator;
 
-    public function undefOrCpf(): ChainedValidator;
+    public function undefOrCpf(): ChainedValidator&Validator;
 
-    public function undefOrCreditCard(string $brand = 'Any'): ChainedValidator;
+    public function undefOrCreditCard(string $brand = 'Any'): ChainedValidator&Validator;
 
     /**
      * @param "alpha-3"|"numeric" $set
      */
-    public function undefOrCurrencyCode(string $set = 'alpha-3'): ChainedValidator;
+    public function undefOrCurrencyCode(string $set = 'alpha-3'): ChainedValidator&Validator;
 
-    public function undefOrDate(string $format = 'Y-m-d'): ChainedValidator;
+    public function undefOrDate(string $format = 'Y-m-d'): ChainedValidator&Validator;
 
-    public function undefOrDateTime(?string $format = null): ChainedValidator;
+    public function undefOrDateTime(?string $format = null): ChainedValidator&Validator;
 
-    public function undefOrDecimal(int $decimals): ChainedValidator;
+    public function undefOrDecimal(int $decimals): ChainedValidator&Validator;
 
-    public function undefOrDigit(string ...$additionalChars): ChainedValidator;
+    public function undefOrDigit(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrDirectory(): ChainedValidator;
+    public function undefOrDirectory(): ChainedValidator&Validator;
 
-    public function undefOrDomain(bool $tldCheck = true): ChainedValidator;
+    public function undefOrDomain(bool $tldCheck = true): ChainedValidator&Validator;
 
-    public function undefOrEach(Validatable $rule): ChainedValidator;
+    public function undefOrEach(Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrEmail(): ChainedValidator;
+    public function undefOrEmail(): ChainedValidator&Validator;
 
-    public function undefOrEndsWith(mixed $endValue, bool $identical = false): ChainedValidator;
+    public function undefOrEndsWith(mixed $endValue, bool $identical = false): ChainedValidator&Validator;
 
-    public function undefOrEquals(mixed $compareTo): ChainedValidator;
+    public function undefOrEquals(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrEquivalent(mixed $compareTo): ChainedValidator;
+    public function undefOrEquivalent(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrEven(): ChainedValidator;
+    public function undefOrEven(): ChainedValidator&Validator;
 
-    public function undefOrExecutable(): ChainedValidator;
+    public function undefOrExecutable(): ChainedValidator&Validator;
 
-    public function undefOrExists(): ChainedValidator;
+    public function undefOrExists(): ChainedValidator&Validator;
 
-    public function undefOrExtension(string $extension): ChainedValidator;
+    public function undefOrExtension(string $extension): ChainedValidator&Validator;
 
-    public function undefOrFactor(int $dividend): ChainedValidator;
+    public function undefOrFactor(int $dividend): ChainedValidator&Validator;
 
-    public function undefOrFalseVal(): ChainedValidator;
+    public function undefOrFalseVal(): ChainedValidator&Validator;
 
-    public function undefOrFibonacci(): ChainedValidator;
+    public function undefOrFibonacci(): ChainedValidator&Validator;
 
-    public function undefOrFile(): ChainedValidator;
+    public function undefOrFile(): ChainedValidator&Validator;
 
-    public function undefOrFilterVar(int $filter, mixed $options = null): ChainedValidator;
+    public function undefOrFilterVar(int $filter, mixed $options = null): ChainedValidator&Validator;
 
-    public function undefOrFinite(): ChainedValidator;
+    public function undefOrFinite(): ChainedValidator&Validator;
 
-    public function undefOrFloatType(): ChainedValidator;
+    public function undefOrFloatType(): ChainedValidator&Validator;
 
-    public function undefOrFloatVal(): ChainedValidator;
+    public function undefOrFloatVal(): ChainedValidator&Validator;
 
-    public function undefOrGraph(string ...$additionalChars): ChainedValidator;
+    public function undefOrGraph(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrGreaterThan(mixed $compareTo): ChainedValidator;
+    public function undefOrGreaterThan(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrGreaterThanOrEqual(mixed $compareTo): ChainedValidator;
+    public function undefOrGreaterThanOrEqual(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrHetu(): ChainedValidator;
+    public function undefOrHetu(): ChainedValidator&Validator;
 
-    public function undefOrHexRgbColor(): ChainedValidator;
+    public function undefOrHexRgbColor(): ChainedValidator&Validator;
 
-    public function undefOrIban(): ChainedValidator;
+    public function undefOrIban(): ChainedValidator&Validator;
 
-    public function undefOrIdentical(mixed $compareTo): ChainedValidator;
+    public function undefOrIdentical(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrImage(): ChainedValidator;
+    public function undefOrImage(): ChainedValidator&Validator;
 
-    public function undefOrImei(): ChainedValidator;
+    public function undefOrImei(): ChainedValidator&Validator;
 
-    public function undefOrIn(mixed $haystack, bool $compareIdentical = false): ChainedValidator;
+    public function undefOrIn(mixed $haystack, bool $compareIdentical = false): ChainedValidator&Validator;
 
-    public function undefOrInfinite(): ChainedValidator;
+    public function undefOrInfinite(): ChainedValidator&Validator;
 
     /**
      * @param class-string $class
      */
-    public function undefOrInstance(string $class): ChainedValidator;
+    public function undefOrInstance(string $class): ChainedValidator&Validator;
 
-    public function undefOrIntType(): ChainedValidator;
+    public function undefOrIntType(): ChainedValidator&Validator;
 
-    public function undefOrIntVal(): ChainedValidator;
+    public function undefOrIntVal(): ChainedValidator&Validator;
 
-    public function undefOrIp(string $range = '*', ?int $options = null): ChainedValidator;
+    public function undefOrIp(string $range = '*', ?int $options = null): ChainedValidator&Validator;
 
-    public function undefOrIsbn(): ChainedValidator;
+    public function undefOrIsbn(): ChainedValidator&Validator;
 
-    public function undefOrIterableType(): ChainedValidator;
+    public function undefOrIterableType(): ChainedValidator&Validator;
 
-    public function undefOrIterableVal(): ChainedValidator;
+    public function undefOrIterableVal(): ChainedValidator&Validator;
 
-    public function undefOrJson(): ChainedValidator;
+    public function undefOrJson(): ChainedValidator&Validator;
 
-    public function undefOrKey(string|int $key, Validatable $rule): ChainedValidator;
+    public function undefOrKey(string|int $key, Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrKeyExists(string|int $key): ChainedValidator;
+    public function undefOrKeyExists(string|int $key): ChainedValidator&Validator;
 
-    public function undefOrKeyOptional(string|int $key, Validatable $rule): ChainedValidator;
+    public function undefOrKeyOptional(string|int $key, Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrKeySet(Validatable $rule, Validatable ...$rules): ChainedValidator;
+    public function undefOrKeySet(Validatable $rule, Validatable ...$rules): ChainedValidator&Validator;
 
     /**
      * @param "alpha-2"|"alpha-3" $set
      */
-    public function undefOrLanguageCode(string $set = 'alpha-2'): ChainedValidator;
+    public function undefOrLanguageCode(string $set = 'alpha-2'): ChainedValidator&Validator;
 
     /**
      * @param callable(mixed): Validatable $ruleCreator
      */
-    public function undefOrLazy(callable $ruleCreator): ChainedValidator;
+    public function undefOrLazy(callable $ruleCreator): ChainedValidator&Validator;
 
-    public function undefOrLeapDate(string $format): ChainedValidator;
+    public function undefOrLeapDate(string $format): ChainedValidator&Validator;
 
-    public function undefOrLeapYear(): ChainedValidator;
+    public function undefOrLeapYear(): ChainedValidator&Validator;
 
-    public function undefOrLength(Validatable $rule): ChainedValidator;
+    public function undefOrLength(Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrLessThan(mixed $compareTo): ChainedValidator;
+    public function undefOrLessThan(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrLessThanOrEqual(mixed $compareTo): ChainedValidator;
+    public function undefOrLessThanOrEqual(mixed $compareTo): ChainedValidator&Validator;
 
-    public function undefOrLowercase(): ChainedValidator;
+    public function undefOrLowercase(): ChainedValidator&Validator;
 
-    public function undefOrLuhn(): ChainedValidator;
+    public function undefOrLuhn(): ChainedValidator&Validator;
 
-    public function undefOrMacAddress(): ChainedValidator;
+    public function undefOrMacAddress(): ChainedValidator&Validator;
 
-    public function undefOrMax(Validatable $rule): ChainedValidator;
+    public function undefOrMax(Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrMaxAge(int $age, ?string $format = null): ChainedValidator;
+    public function undefOrMaxAge(int $age, ?string $format = null): ChainedValidator&Validator;
 
-    public function undefOrMimetype(string $mimetype): ChainedValidator;
+    public function undefOrMimetype(string $mimetype): ChainedValidator&Validator;
 
-    public function undefOrMin(Validatable $rule): ChainedValidator;
+    public function undefOrMin(Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrMinAge(int $age, ?string $format = null): ChainedValidator;
+    public function undefOrMinAge(int $age, ?string $format = null): ChainedValidator&Validator;
 
-    public function undefOrMultiple(int $multipleOf): ChainedValidator;
+    public function undefOrMultiple(int $multipleOf): ChainedValidator&Validator;
 
-    public function undefOrNegative(): ChainedValidator;
+    public function undefOrNegative(): ChainedValidator&Validator;
 
-    public function undefOrNfeAccessKey(): ChainedValidator;
+    public function undefOrNfeAccessKey(): ChainedValidator&Validator;
 
-    public function undefOrNif(): ChainedValidator;
+    public function undefOrNif(): ChainedValidator&Validator;
 
-    public function undefOrNip(): ChainedValidator;
+    public function undefOrNip(): ChainedValidator&Validator;
 
-    public function undefOrNo(bool $useLocale = false): ChainedValidator;
+    public function undefOrNo(bool $useLocale = false): ChainedValidator&Validator;
 
-    public function undefOrNoWhitespace(): ChainedValidator;
+    public function undefOrNoWhitespace(): ChainedValidator&Validator;
 
-    public function undefOrNoneOf(Validatable $rule1, Validatable $rule2, Validatable ...$rules): ChainedValidator;
+    public function undefOrNoneOf(
+        Validatable $rule1,
+        Validatable $rule2,
+        Validatable ...$rules,
+    ): ChainedValidator&Validator;
 
-    public function undefOrNot(Validatable $rule): ChainedValidator;
+    public function undefOrNot(Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrNotBlank(): ChainedValidator;
+    public function undefOrNotBlank(): ChainedValidator&Validator;
 
-    public function undefOrNotEmoji(): ChainedValidator;
+    public function undefOrNotEmoji(): ChainedValidator&Validator;
 
-    public function undefOrNotEmpty(): ChainedValidator;
+    public function undefOrNotEmpty(): ChainedValidator&Validator;
 
-    public function undefOrNotOptional(): ChainedValidator;
+    public function undefOrNotOptional(): ChainedValidator&Validator;
 
-    public function undefOrNullType(): ChainedValidator;
+    public function undefOrNullType(): ChainedValidator&Validator;
 
-    public function undefOrNumber(): ChainedValidator;
+    public function undefOrNumber(): ChainedValidator&Validator;
 
-    public function undefOrNumericVal(): ChainedValidator;
+    public function undefOrNumericVal(): ChainedValidator&Validator;
 
-    public function undefOrObjectType(): ChainedValidator;
+    public function undefOrObjectType(): ChainedValidator&Validator;
 
-    public function undefOrOdd(): ChainedValidator;
+    public function undefOrOdd(): ChainedValidator&Validator;
 
-    public function undefOrOneOf(Validatable $rule1, Validatable $rule2, Validatable ...$rules): ChainedValidator;
+    public function undefOrOneOf(
+        Validatable $rule1,
+        Validatable $rule2,
+        Validatable ...$rules,
+    ): ChainedValidator&Validator;
 
-    public function undefOrPerfectSquare(): ChainedValidator;
+    public function undefOrPerfectSquare(): ChainedValidator&Validator;
 
-    public function undefOrPesel(): ChainedValidator;
+    public function undefOrPesel(): ChainedValidator&Validator;
 
-    public function undefOrPhone(?string $countryCode = null): ChainedValidator;
+    public function undefOrPhone(?string $countryCode = null): ChainedValidator&Validator;
 
-    public function undefOrPhpLabel(): ChainedValidator;
+    public function undefOrPhpLabel(): ChainedValidator&Validator;
 
-    public function undefOrPis(): ChainedValidator;
+    public function undefOrPis(): ChainedValidator&Validator;
 
-    public function undefOrPolishIdCard(): ChainedValidator;
+    public function undefOrPolishIdCard(): ChainedValidator&Validator;
 
-    public function undefOrPortugueseNif(): ChainedValidator;
+    public function undefOrPortugueseNif(): ChainedValidator&Validator;
 
-    public function undefOrPositive(): ChainedValidator;
+    public function undefOrPositive(): ChainedValidator&Validator;
 
-    public function undefOrPostalCode(string $countryCode, bool $formatted = false): ChainedValidator;
+    public function undefOrPostalCode(string $countryCode, bool $formatted = false): ChainedValidator&Validator;
 
-    public function undefOrPrimeNumber(): ChainedValidator;
+    public function undefOrPrimeNumber(): ChainedValidator&Validator;
 
-    public function undefOrPrintable(string ...$additionalChars): ChainedValidator;
+    public function undefOrPrintable(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrProperty(string $propertyName, Validatable $rule): ChainedValidator;
+    public function undefOrProperty(string $propertyName, Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrPropertyExists(string $propertyName): ChainedValidator;
+    public function undefOrPropertyExists(string $propertyName): ChainedValidator&Validator;
 
-    public function undefOrPropertyOptional(string $propertyName, Validatable $rule): ChainedValidator;
+    public function undefOrPropertyOptional(string $propertyName, Validatable $rule): ChainedValidator&Validator;
 
-    public function undefOrPublicDomainSuffix(): ChainedValidator;
+    public function undefOrPublicDomainSuffix(): ChainedValidator&Validator;
 
-    public function undefOrPunct(string ...$additionalChars): ChainedValidator;
+    public function undefOrPunct(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrReadable(): ChainedValidator;
+    public function undefOrReadable(): ChainedValidator&Validator;
 
-    public function undefOrRegex(string $regex): ChainedValidator;
+    public function undefOrRegex(string $regex): ChainedValidator&Validator;
 
-    public function undefOrResourceType(): ChainedValidator;
+    public function undefOrResourceType(): ChainedValidator&Validator;
 
-    public function undefOrRoman(): ChainedValidator;
+    public function undefOrRoman(): ChainedValidator&Validator;
 
-    public function undefOrScalarVal(): ChainedValidator;
+    public function undefOrScalarVal(): ChainedValidator&Validator;
 
-    public function undefOrSize(string|int|null $minSize = null, string|int|null $maxSize = null): ChainedValidator;
+    public function undefOrSize(
+        string|int|null $minSize = null,
+        string|int|null $maxSize = null,
+    ): ChainedValidator&Validator;
 
-    public function undefOrSlug(): ChainedValidator;
+    public function undefOrSlug(): ChainedValidator&Validator;
 
-    public function undefOrSorted(string $direction): ChainedValidator;
+    public function undefOrSorted(string $direction): ChainedValidator&Validator;
 
-    public function undefOrSpace(string ...$additionalChars): ChainedValidator;
+    public function undefOrSpace(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrStartsWith(mixed $startValue, bool $identical = false): ChainedValidator;
+    public function undefOrStartsWith(mixed $startValue, bool $identical = false): ChainedValidator&Validator;
 
-    public function undefOrStringType(): ChainedValidator;
+    public function undefOrStringType(): ChainedValidator&Validator;
 
-    public function undefOrStringVal(): ChainedValidator;
+    public function undefOrStringVal(): ChainedValidator&Validator;
 
-    public function undefOrSubdivisionCode(string $countryCode): ChainedValidator;
+    public function undefOrSubdivisionCode(string $countryCode): ChainedValidator&Validator;
 
     /**
      * @param mixed[] $superset
      */
-    public function undefOrSubset(array $superset): ChainedValidator;
+    public function undefOrSubset(array $superset): ChainedValidator&Validator;
 
-    public function undefOrSymbolicLink(): ChainedValidator;
+    public function undefOrSymbolicLink(): ChainedValidator&Validator;
 
-    public function undefOrTime(string $format = 'H:i:s'): ChainedValidator;
+    public function undefOrTime(string $format = 'H:i:s'): ChainedValidator&Validator;
 
-    public function undefOrTld(): ChainedValidator;
+    public function undefOrTld(): ChainedValidator&Validator;
 
-    public function undefOrTrueVal(): ChainedValidator;
+    public function undefOrTrueVal(): ChainedValidator&Validator;
 
-    public function undefOrUnique(): ChainedValidator;
+    public function undefOrUnique(): ChainedValidator&Validator;
 
-    public function undefOrUploaded(): ChainedValidator;
+    public function undefOrUploaded(): ChainedValidator&Validator;
 
-    public function undefOrUppercase(): ChainedValidator;
+    public function undefOrUppercase(): ChainedValidator&Validator;
 
-    public function undefOrUrl(): ChainedValidator;
+    public function undefOrUrl(): ChainedValidator&Validator;
 
-    public function undefOrUuid(?int $version = null): ChainedValidator;
+    public function undefOrUuid(?int $version = null): ChainedValidator&Validator;
 
-    public function undefOrVersion(): ChainedValidator;
+    public function undefOrVersion(): ChainedValidator&Validator;
 
-    public function undefOrVideoUrl(?string $service = null): ChainedValidator;
+    public function undefOrVideoUrl(?string $service = null): ChainedValidator&Validator;
 
-    public function undefOrVowel(string ...$additionalChars): ChainedValidator;
+    public function undefOrVowel(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrWhen(Validatable $when, Validatable $then, ?Validatable $else = null): ChainedValidator;
+    public function undefOrWhen(
+        Validatable $when,
+        Validatable $then,
+        ?Validatable $else = null,
+    ): ChainedValidator&Validator;
 
-    public function undefOrWritable(): ChainedValidator;
+    public function undefOrWritable(): ChainedValidator&Validator;
 
-    public function undefOrXdigit(string ...$additionalChars): ChainedValidator;
+    public function undefOrXdigit(string ...$additionalChars): ChainedValidator&Validator;
 
-    public function undefOrYes(bool $useLocale = false): ChainedValidator;
+    public function undefOrYes(bool $useLocale = false): ChainedValidator&Validator;
 }
