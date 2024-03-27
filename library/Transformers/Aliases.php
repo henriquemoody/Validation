@@ -17,6 +17,7 @@ final class Aliases implements Transformer
     private const ALIASES = [
         'nullable' => 'nullOr',
         'optional' => 'undefOr',
+        'notOptional' => 'notUndef',
     ];
 
     public function __construct(

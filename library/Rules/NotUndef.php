@@ -15,16 +15,16 @@ use Respect\Validation\Result;
 use Respect\Validation\Rules\Core\Standard;
 
 #[Template(
-    'The value must not be optional',
-    'The value must be optional',
+    'The value must be defined',
+    'The value must be undefined',
     self::TEMPLATE_STANDARD,
 )]
 #[Template(
-    '{{name}} must not be optional',
-    '{{name}} must be optional',
+    '{{name}} must be defined',
+    '{{name}} must be undefined',
     self::TEMPLATE_NAMED,
 )]
-final class NotOptional extends Standard
+final class NotUndef extends Standard
 {
     use CanValidateUndefined;
 

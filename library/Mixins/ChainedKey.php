@@ -253,7 +253,12 @@ interface ChainedKey
 
     public function keyNotEmpty(int|string $key): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public function keyNotOptional(int|string $key): ChainedValidator;
+
+    public function keyNotUndef(int|string $key): ChainedValidator;
 
     public function keyNullType(int|string $key): ChainedValidator;
 

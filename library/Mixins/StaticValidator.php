@@ -254,7 +254,12 @@ interface StaticValidator extends
 
     public static function notEmpty(): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public static function notOptional(): ChainedValidator;
+
+    public static function notUndef(): ChainedValidator;
 
     public static function nullOr(Validatable $rule): ChainedValidator;
 

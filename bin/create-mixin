@@ -25,6 +25,7 @@ use Respect\Validation\Mixins\StaticNot;
 use Respect\Validation\Mixins\StaticNullOr;
 use Respect\Validation\Mixins\StaticProperty;
 use Respect\Validation\Mixins\StaticUndefOr;
+use Respect\Validation\Rules\NotUndef;
 use Respect\Validation\Rules\NullOr;
 use Respect\Validation\Rules\UndefOr;
 use Respect\Validation\Validatable;
@@ -59,6 +60,18 @@ function addMethodToInterface(
         $method->addParameter('propertyName')->setType('string');
     }
 
+    if ($originalName === 'Optional') {
+        $method->addComment('@deprecated Use {@see undefOr()} instead.');
+    }
+
+    if ($originalName === 'Nullable') {
+        $method->addComment('@deprecated Use {@see nullOr()} instead.');
+    }
+
+    if ($originalName === 'NotOptional') {
+        $method->addComment('@deprecated Use {@see notUndef()} instead.');
+    }
+
     $reflrectionConstructor = $reflection->getConstructor();
     if ($reflrectionConstructor === null) {
         return;
@@ -66,14 +79,6 @@ function addMethodToInterface(
     $commend = $reflrectionConstructor->getDocComment();
     if ($commend) {
         $method->addComment(preg_replace('@(/\*\* *| +\* +| +\*/)@', '', $commend));
-    }
-
-    if ($originalName === 'Optional') {
-        $method->addComment('@deprecated Use {@see undefOr()} instead.');
-    }
-
-    if ($originalName === 'Nullable') {
-        $method->addComment('@deprecated Use {@see nullOr()} instead.');
     }
 
     foreach ($reflrectionConstructor->getParameters() as $reflectionParameter) {
@@ -175,10 +180,10 @@ function overwriteFile(string $content, string $basename): void
         ['Length', 'length', $numberRelatedRules, []],
         ['Max', 'max', $numberRelatedRules, []],
         ['Min', 'min', $numberRelatedRules, []],
-        ['Not', 'not', [], ['Not', 'NotEmpty', 'NotBlank', 'NotEmoji', 'NotOptional', 'NullOr', 'UndefOr', 'Optional']],
-        ['NullOr', 'nullOr', [], ['Nullable', 'NullOr', 'Optional', 'UndefOr']],
+        ['Not', 'not', [], ['Not', 'NotEmpty', 'NotBlank', 'NotEmoji', 'NotOptional', 'NotUndef', 'NullOr', 'UndefOr', 'Optional']],
+        ['NullOr', 'nullOr', [], ['Nullable', 'NullOr', 'NotUndef', 'Optional', 'UndefOr']],
         ['Property', 'property', [], $structureRelatedRules],
-        ['UndefOr', 'undefOr', [], ['Nullable', 'NullOr', 'Optional', 'UndefOr']],
+        ['UndefOr', 'undefOr', [], ['Nullable', 'NullOr', 'NotUndef', 'Optional', 'UndefOr']],
         ['Validator', null, [], []],
     ];
 
@@ -199,6 +204,9 @@ function overwriteFile(string $content, string $basename): void
         }
         if ($className === NullOr::class) {
             $names['Nullable'] = $reflection;
+        }
+        if ($className === NotUndef::class) {
+            $names['NotOptional'] = $reflection;
         }
     }
     ksort($names);

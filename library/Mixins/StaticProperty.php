@@ -289,7 +289,12 @@ interface StaticProperty
 
     public static function propertyNotEmpty(string $propertyName): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public static function propertyNotOptional(string $propertyName): ChainedValidator;
+
+    public static function propertyNotUndef(string $propertyName): ChainedValidator;
 
     public static function propertyNullType(string $propertyName): ChainedValidator;
 

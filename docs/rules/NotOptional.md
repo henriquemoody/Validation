@@ -1,32 +1,32 @@
-# NotOptional
+# NotUndef
 
-- `NotOptional()`
+- `NotUndef()`
 
 Validates if the given input is not optional. By _optional_ we consider `null`
 or an empty string (`''`).
 
 ```php
-v::notOptional()->validate(''); // false
-v::notOptional()->validate(null); // false
+v::notUndef()->validate(''); // false
+v::notUndef()->validate(null); // false
 ```
 
 Other values:
 
 ```php
-v::notOptional()->validate([]); // true
-v::notOptional()->validate(' '); // true
-v::notOptional()->validate(0); // true
-v::notOptional()->validate('0'); // true
-v::notOptional()->validate(0); // true
-v::notOptional()->validate('0.0'); // true
-v::notOptional()->validate(false); // true
-v::notOptional()->validate(['']); // true
-v::notOptional()->validate([' ']); // true
-v::notOptional()->validate([0]); // true
-v::notOptional()->validate(['0']); // true
-v::notOptional()->validate([false]); // true
-v::notOptional()->validate([[''), [0]]); // true
-v::notOptional()->validate(new stdClass()); // true
+v::notUndef()->validate([]); // true
+v::notUndef()->validate(' '); // true
+v::notUndef()->validate(0); // true
+v::notUndef()->validate('0'); // true
+v::notUndef()->validate(0); // true
+v::notUndef()->validate('0.0'); // true
+v::notUndef()->validate(false); // true
+v::notUndef()->validate(['']); // true
+v::notUndef()->validate([' ']); // true
+v::notUndef()->validate([0]); // true
+v::notUndef()->validate(['0']); // true
+v::notUndef()->validate([false]); // true
+v::notUndef()->validate([[''), [0]]); // true
+v::notUndef()->validate(new stdClass()); // true
 ```
 
 ## Categorization
@@ -47,4 +47,4 @@ See also:
 - [NotEmpty](NotEmpty.md)
 - [NullType](NullType.md)
 - [Number](Number.md)
-- [Optional](Optional.md)
+- [Undef](Undef.md)

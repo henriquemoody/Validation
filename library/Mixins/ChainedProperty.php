@@ -265,7 +265,12 @@ interface ChainedProperty
 
     public function propertyNotEmpty(string $propertyName): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public function propertyNotOptional(string $propertyName): ChainedValidator;
+
+    public function propertyNotUndef(string $propertyName): ChainedValidator;
 
     public function propertyNullType(string $propertyName): ChainedValidator;
 

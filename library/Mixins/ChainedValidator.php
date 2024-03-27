@@ -251,7 +251,12 @@ interface ChainedValidator extends
 
     public function notEmpty(): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public function notOptional(): ChainedValidator;
+
+    public function notUndef(): ChainedValidator;
 
     public function nullOr(Validatable $rule): ChainedValidator;
 

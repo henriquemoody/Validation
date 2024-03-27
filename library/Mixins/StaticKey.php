@@ -257,7 +257,12 @@ interface StaticKey
 
     public static function keyNotEmpty(int|string $key): ChainedValidator;
 
+    /**
+     * @deprecated Use {@see notUndef()} instead.
+     */
     public static function keyNotOptional(int|string $key): ChainedValidator;
+
+    public static function keyNotUndef(int|string $key): ChainedValidator;
 
     public static function keyNullType(int|string $key): ChainedValidator;
 
