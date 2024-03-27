@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-declare(strict_types=1);
 
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validatable;

@@ -1,7 +1,6 @@
 --FILE--
 <?php
 
-declare(strict_types=1);
 
 use Respect\Validation\Rules\ArrayType;
 use Respect\Validation\Rules\BoolType;

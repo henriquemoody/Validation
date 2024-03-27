@@ -21,4 +21,4 @@ parameters:
     - library/
     - tests/
   excludePaths:
-    - tests/integration/
+    - library/Mixins

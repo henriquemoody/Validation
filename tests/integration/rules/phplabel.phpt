@@ -3,7 +3,6 @@ PhpLabel rule exception should not be thrown for valid inputs
 --FILE--
 <?php
 
-declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
