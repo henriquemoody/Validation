@@ -14,8 +14,31 @@ run([
     'With $type = "microseconds"' => [v::dateTimeDiff('microseconds', v::equals(7)), '6 microseconds ago'],
     'With custom $format' => [v::dateTimeDiff('years', v::lessThan(8), 'd/m/Y'), '09/12/1988'],
     'With custom $now' => [v::dateTimeDiff('years', v::lessThan(9), null, new DateTimeImmutable()), '09/12/1988'],
+    'With custom template' => [v::dateTimeDiff('years', v::equals(2)->setTemplate('Custom template')), '1 year ago'],
     'Wrapped by "not"' => [v::not(v::dateTimeDiff('years', v::lessThan(8))), '7 year ago'],
     'Wrapping "not"' => [v::dateTimeDiff('years', v::not(v::lessThan(9))), '8 year ago'],
+    'Wrapped with custom template' => [
+        v::dateTimeDiff('years', v::equals(2)->setTemplate('Wrapped with custom template')),
+        '1 year ago',
+    ],
+    'Wrapper with custom template' => [
+        v::dateTimeDiff('years', v::equals(2))->setTemplate('Wrapper with custom template'),
+        '1 year ago',
+    ],
+    'Not a sibling compatible' => [
+        v::dateTimeDiff('years', v::primeNumber()->between(2, 5)),
+        '1 year ago',
+    ],
+    'Not a sibling compatible with templates' => [
+        v::dateTimeDiff('years', v::primeNumber()->between(2, 5)),
+        '1 year ago',
+        [
+            'dateTimeDiff' => [
+                'primeNumber' => 'Interval must be a valid prime number',
+                'between' => 'Interval must be between 2 and 5',
+            ],
+        ],
+    ],
 ]);
 ?>
 --EXPECTF--
@@ -83,6 +106,14 @@ The number of years between %d-%d-%d %d:%d:%d.%d and 09/12/1988 must be less tha
     'dateTimeDiff' => 'The number of years between %d-%d-%d %d:%d:%d.%d and 09/12/1988 must be less than 9',
 ]
 
+With custom template
+⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
+Custom template
+- Custom template
+[
+    'dateTimeDiff' => 'Custom template',
+]
+
 Wrapped by "not"
 ⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
 The number of years between now and 7 year ago must not be less than 8
@@ -97,4 +128,44 @@ The number of years between now and 8 year ago must not be less than 9
 - The number of years between now and 8 year ago must not be less than 9
 [
     'dateTimeDiff' => 'The number of years between now and 8 year ago must not be less than 9',
+]
+
+Wrapped with custom template
+⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
+Wrapped with custom template
+- Wrapped with custom template
+[
+    'dateTimeDiff' => 'Wrapped with custom template',
+]
+
+Wrapper with custom template
+⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
+Wrapper with custom template
+- Wrapper with custom template
+[
+    'dateTimeDiff' => 'Wrapper with custom template',
+]
+
+Not a sibling compatible
+⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
+1 must be a valid prime number
+- All of the required rules must pass for 1
+  - 1 must be a valid prime number
+  - 1 must be between 2 and 5
+[
+    '__root__' => 'All of the required rules must pass for 1',
+    'primeNumber' => '1 must be a valid prime number',
+    'between' => '1 must be between 2 and 5',
+]
+
+Not a sibling compatible with templates
+⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺
+Interval must be a valid prime number
+- All of the required rules must pass for 1
+  - Interval must be a valid prime number
+  - Interval must be between 2 and 5
+[
+    '__root__' => 'All of the required rules must pass for 1',
+    'primeNumber' => 'Interval must be a valid prime number',
+    'between' => 'Interval must be between 2 and 5',
 ]

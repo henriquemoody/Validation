@@ -12,7 +12,6 @@ namespace Respect\Validation\Rules;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Respect\Validation\Exceptions\InvalidRuleConstructorException;
-use Respect\Validation\Helpers\CanExtractRules;
 use Respect\Validation\Helpers\CanValidateDateTime;
 use Respect\Validation\Message\Template;
 use Respect\Validation\Result;
@@ -28,14 +27,11 @@ use function in_array;
 final class DateTimeDiff extends Standard
 {
     use CanValidateDateTime;
-    use CanExtractRules;
-
-    private readonly Validatable $rule;
 
     /** @param "years"|"months"|"days"|"hours"|"minutes"|"seconds"|"microseconds" $type */
     public function __construct(
         private readonly string $type,
-        Validatable $rule,
+        private readonly Validatable $rule,
         private readonly ?string $format = null,
         private readonly ?DateTimeImmutable $now = null,
     ) {
@@ -47,10 +43,6 @@ final class DateTimeDiff extends Standard
                 $availableTypes
             );
         }
-        $this->rule = $this->extractSiblingSuitableRule(
-            $rule,
-            new InvalidRuleConstructorException('DateTimeDiff must contain exactly one rule')
-        );
     }
 
     public function evaluate(mixed $input): Result
@@ -61,13 +53,17 @@ final class DateTimeDiff extends Standard
         }
 
         $now = $this->now ?? new DateTimeImmutable();
-        $nextSibling = $this->rule
-            ->evaluate($this->comparisonValue($now, $compareTo))
-            ->withNameIfMissing($input instanceof DateTimeInterface ? $input->format('c') : $input);
+        $result = $this->rule->evaluate($this->comparisonValue($now, $compareTo));
+        if (!$result->isSiblingCompatible()) {
+            return $result->withId('dateTimeDiff');
+        }
 
         $parameters = ['type' => $this->type, 'now' => $this->nowParameter($now)];
 
-        return (new Result($nextSibling->isValid, $input, $this, $parameters))->withNextSibling($nextSibling);
+        return (new Result($result->isValid, $input, $this, $parameters))
+            ->withNextSibling(
+                $result->withNameIfMissing($input instanceof DateTimeInterface ? $input->format('c') : $input)
+            );
     }
 
     private function comparisonValue(DateTimeInterface $now, DateTimeInterface $compareTo): int|float

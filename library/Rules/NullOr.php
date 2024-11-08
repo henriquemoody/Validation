@@ -13,30 +13,38 @@ use Respect\Validation\Message\Template;
 use Respect\Validation\Result;
 use Respect\Validation\Rules\Core\Wrapper;
 
+use function array_map;
+
 #[Template(
-    'The value must be null',
-    'The value must not be null',
-    self::TEMPLATE_STANDARD,
-)]
-#[Template(
-    '{{name}} must be null',
-    '{{name}} must not be null',
-    self::TEMPLATE_NAMED,
+    'or must be null',
+    'and must not be null',
 )]
 final class NullOr extends Wrapper
 {
-    public const TEMPLATE_NAMED = '__named__';
-
     public function evaluate(mixed $input): Result
     {
+        $result = $this->rule->evaluate($input);
         if ($input !== null) {
-            return $this->rule->evaluate($input)->withPrefixedId('nullOr');
+            return $this->buildSibling($result);
         }
 
-        if ($this->getName()) {
-            return Result::passed($input, $this, [], self::TEMPLATE_NAMED);
+        if (!$result->isValid) {
+            return $this->buildSibling($result->withInvertedValidation());
         }
 
-        return Result::passed($input, $this);
+        return $this->buildSibling($result);
+    }
+
+    private function buildSibling(Result $wrapped): Result
+    {
+        if ($wrapped->isSiblingCompatible()) {
+            return $wrapped
+                ->withPrefixedId('nullOr')
+                ->withNextSibling(new Result($wrapped->isValid, $wrapped->input, $this));
+        }
+
+        return $wrapped->withChildren(
+            ...array_map(fn(Result $child) => $this->buildSibling($child), $wrapped->children)
+        );
     }
 }

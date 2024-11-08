@@ -57,10 +57,10 @@ not
 
 nullOr
 ⎺⎺⎺⎺⎺⎺
-"string" must be of type boolean
-- "string" must be of type boolean
+"string" must be of type boolean or must be null
+- "string" must be of type boolean or must be null
 [
-    'nullOrBoolType' => '"string" must be of type boolean',
+    'nullOrBoolType' => '"string" must be of type boolean or must be null',
 ]
 
 property
@@ -73,8 +73,8 @@ foo must be between 1 and 3
 
 undefOr
 ⎺⎺⎺⎺⎺⎺⎺
-"string" must be a URL
-- "string" must be a URL
+"string" must be a URL or must be undefined
+- "string" must be a URL or must be undefined
 [
-    'undefOrUrl' => '"string" must be a URL',
+    'undefOrUrl' => '"string" must be a URL or must be undefined',
 ]
