@@ -5,8 +5,6 @@ document we're gonna explore the Respect\Validation API without fluent interface
 or magic methods. We'll use a traditional dependency injection approach.
 
 ```php
-use Respect\Validation\Validator as v;
-
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 ```
