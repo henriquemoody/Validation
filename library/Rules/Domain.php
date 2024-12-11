@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Respect\Validation\Rules;
 
+use Pdp\Exception\UnableToProcessHost;
+use Pdp\TopLevelDomains;
 use Respect\Validation\Message\Template;
 use Respect\Validation\Result;
 use Respect\Validation\Rule;
@@ -25,70 +27,27 @@ use function mb_substr_count;
 )]
 final class Domain extends Standard
 {
-    private readonly Rule $genericRule;
-
-    private readonly Rule $tldRule;
-
-    private readonly Rule $partsRule;
-
-    public function __construct(bool $tldCheck = true)
-    {
-        $this->genericRule = $this->createGenericRule();
-        $this->tldRule = $this->createTldRule($tldCheck);
-        $this->partsRule = $this->createPartsRule();
+    public function __construct(
+        private readonly bool $requireTld = true,
+    ) {
     }
 
     public function evaluate(mixed $input): Result
     {
-        $genericResult = $this->genericRule->evaluate($input);
-        if (!$genericResult->isValid) {
+        if (!is_string($input)) {
             return Result::failed($input, $this);
         }
 
-        $parts = explode('.', (string) $input);
-        if (count($parts) >= 2) {
-            $childResult = $this->tldRule->evaluate(array_pop($parts));
-            if (!$childResult->isValid) {
+        try {
+            $domain = \Pdp\Domain::fromIDNA2008($input);
+            if (count($domain->labels()) === 1) {
                 return Result::failed($input, $this);
             }
+
+        } catch (\Throwable $e) {
+            return Result::failed($input, $this);
         }
 
-        return new Result($this->partsRule->evaluate($parts)->isValid, $input, $this);
-    }
-
-    private function createGenericRule(): Consecutive
-    {
-        return new Consecutive(
-            new StringType(),
-            new NoWhitespace(),
-            new Contains('.'),
-            new Length(new GreaterThanOrEqual(3))
-        );
-    }
-
-    private function createTldRule(bool $realTldCheck): Rule
-    {
-        if ($realTldCheck) {
-            return new Tld();
-        }
-
-        return new Consecutive(new Not(new StartsWith('-')), new Length(new GreaterThanOrEqual(2)));
-    }
-
-    private function createPartsRule(): Rule
-    {
-        return new Each(
-            new Consecutive(
-                new Alnum('-'),
-                new Not(new StartsWith('-')),
-                new AnyOf(
-                    new Not(new Contains('--')),
-                    new Callback(static function ($str) {
-                        return mb_substr_count($str, '--') == 1;
-                    })
-                ),
-                new Not(new EndsWith('-'))
-            )
-        );
+        return Result::passed($input, $this);
     }
 }

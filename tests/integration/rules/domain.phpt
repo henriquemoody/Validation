@@ -13,3 +13,4 @@ exceptionFullMessage(static fn() => v::not(v::domain())->assert('github.com'));
 "r--w.com" must not be a valid domain
 - "p-éz-.kk" must be a valid domain
 - "github.com" must not be a valid domain
+

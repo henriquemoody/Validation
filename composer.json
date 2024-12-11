@@ -26,6 +26,7 @@
     "require-dev": {
         "egulias/email-validator": "^4.0",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
+        "jeremykendall/php-domain-parser": "^6.0",
         "malukenho/docheader": "^1.0",
         "mikey179/vfsstream": "^1.6",
         "nette/php-generator": "^4.1",
