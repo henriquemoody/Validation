@@ -9,6 +9,7 @@ use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\Printer;
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Failures;
 use Respect\Validation\Mixins\ChainedKey;
 use Respect\Validation\Mixins\ChainedLength;
 use Respect\Validation\Mixins\ChainedMax;
@@ -239,6 +240,11 @@ function overwriteFile(string $content, string $basename): void
                 '@param array<string, mixed>|callable(\%s): \Throwable|string|\Throwable|null $template',
                 ValidationException::class
             ));
+
+            $failures = $chainedInterface->addMethod('failures')->setPublic()->setReturnType(Failures::class);
+            $failures->addParameter('input')->setType('mixed');
+            $failures->addParameter('template')->setType('array|string|null')->setDefaultValue(null);
+            $failures->addComment('@param array<string, mixed>|string|null $template');
 
             $setTemplates = $chainedInterface->addMethod('setTemplates')->setPublic()->setReturnType(ChainedValidator::class);
             $setTemplates->addParameter('templates')->setType('array');

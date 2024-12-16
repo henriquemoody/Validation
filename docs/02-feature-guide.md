@@ -117,3 +117,16 @@ v::dateTime('Y-m-d')
     ->setName('Age')
     ->assert($input);
 ```
+
+## Getting failures (without exceptions
+
+Use the `failures()` method will give you an object with all the failures found in the input.
+
+```php
+$failures = v::dateTime('Y-m-d')->between('1980-02-02', 'now')->failures($input);
+if ($failures === null) {
+    echo 'Validation did not fail';
+} else {
+    echo 'Validation failed: ' . $failures->message;
+
+```

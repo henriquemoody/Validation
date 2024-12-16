@@ -11,6 +11,7 @@ namespace Respect\Validation\Mixins;
 
 use DateTimeImmutable;
 use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Failures;
 use Respect\Validation\Rule;
 use Throwable;
 
@@ -31,6 +32,11 @@ interface ChainedValidator extends
      * @param array<string, mixed>|callable(ValidationException): Throwable|string|Throwable|null $template
      */
     public function assert(mixed $input, array|callable|string|Throwable|null $template = null): void;
+
+    /**
+     * @param array<string, mixed>|string|null $template
+     */
+    public function failures(mixed $input, array|string|null $template = null): Failures;
 
     /**
      * @param array<string, mixed> $templates

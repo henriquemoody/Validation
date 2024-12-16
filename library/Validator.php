@@ -68,13 +68,30 @@ final class Validator implements Rule
     /** @param array<string, mixed>|callable(ValidationException): Throwable|string|Throwable|null $template */
     public function assert(mixed $input, array|string|Throwable|callable|null $template = null): void
     {
-        $result = $this->evaluate($input);
-        if ($result->isValid) {
+        $message = $this->failures($input, is_array($template) || is_string($template) ? $template : null);
+        if ($message === null) {
             return;
         }
 
         if ($template instanceof Throwable) {
             throw $template;
+        }
+
+        $exception = new ValidationException($message->message, $message->fullMessage, $message->messages);
+
+        if (!is_callable($template)) {
+            throw $exception;
+        }
+
+        throw $template($exception);
+    }
+
+    /** @param array<string, mixed>|string|null $template */
+    public function failures(mixed $input, array|string|null $template = null): ?Failures
+    {
+        $result = $this->evaluate($input);
+        if ($result->isValid) {
+            return null;
         }
 
         $templates = $this->templates;
@@ -86,17 +103,12 @@ final class Validator implements Rule
             $templates = ['__root__' => $this->getTemplate()];
         }
 
-        $exception = new ValidationException(
+        return new Failures(
+            $result,
             $this->formatter->main($result, $templates, $this->translator),
             $this->formatter->full($result, $templates, $this->translator),
             $this->formatter->array($result, $templates, $this->translator)
         );
-
-        if (!is_callable($template)) {
-            throw $exception;
-        }
-
-        throw $template($exception);
     }
 
     /** @param array<string, mixed> $templates */
