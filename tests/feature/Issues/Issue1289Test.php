@@ -54,7 +54,8 @@ test('https://github.com/Respect/Validation/issues/1289', expectAll(
       - description must be a string value
     FULL_MESSAGE,
     [
-        'allOf' => [
+        '__root__' => 'Each item in `[["default": 2, "description": [], "children": ["nope"]]]` must be valid',
+        0 => [
             '__root__' => 'These rules must pass for `["default": 2, "description": [], "children": ["nope"]]`',
             'default' => [
                 '__root__' => 'Only one of these rules must pass for default',

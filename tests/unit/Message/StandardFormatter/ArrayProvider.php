@@ -76,7 +76,10 @@ trait ArrayProvider
                 [
                     '__root__' => '__parent_original__',
                     '1st' => '__1st_original__',
-                    '2nd' => '__2nd_1st_original__',
+                    '2nd' => [
+                        '__root__' => '__2nd_original__',
+                        '2nd_1st' => '__2nd_1st_original__',
+                    ],
                     '3rd' => '__3rd_original__',
                 ],
             ],
