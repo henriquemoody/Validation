@@ -97,6 +97,7 @@ final class StandardFormatter implements Formatter
      */
     public function array(Result $result, array $templates, Translator $translator): array
     {
+        $whoamid = sprintf('%s.%s.%s', $result->rule::class, $result->id, $result->name);
         $selectedTemplates = $this->selectTemplates($result, $templates);
         $deduplicatedChildren = $this->extractDeduplicatedChildren($result);
         if (count($deduplicatedChildren) === 0 || $this->isFinalTemplate($result, $selectedTemplates)) {
@@ -112,11 +113,17 @@ final class StandardFormatter implements Formatter
                 $this->selectTemplates($child, $selectedTemplates),
                 $translator
             );
-            if (count($messages[$child->id]) !== 1) {
+            if ($child->id == 'each' && is_array($messages['each'])) {
+                $messages = array_merge($messages, $messages['each']);
+                unset($messages['each']);
                 continue;
             }
-
-            $messages[$child->id] = current($messages[$child->id]);
+            if (count($messages[$child->id]) === 1) {
+                $key = key($messages[$child->id]);
+                if ($key == $child->id) {
+                    $messages[$child->id] = current($messages[$child->id]);
+                }
+            }
         }
 
         if (count($messages) > 1) {
