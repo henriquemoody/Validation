@@ -25,6 +25,8 @@ final class Result
 
     public readonly string $id;
 
+    public readonly string $path;
+
     public readonly ?string $name;
 
     public readonly string $template;
