@@ -23,7 +23,6 @@ final class Key extends Wrapper implements KeyRelated
         private readonly int|string $key,
         Rule $rule,
     ) {
-        $rule->setName($rule->getName() ?? (string) $key);
         parent::__construct($rule);
     }
 
@@ -39,9 +38,6 @@ final class Key extends Wrapper implements KeyRelated
             return $keyExistsResult;
         }
 
-        return $this->rule
-            ->evaluate($input[$this->key])
-            ->withUnchangeableId((string) $this->key)
-            ->withNameIfMissing($this->rule->getName() ?? (string) $this->key);
+        return (new Binder($this, $this->rule))->evaluate($input[$this->key])->withPath($this->key);
     }
 }

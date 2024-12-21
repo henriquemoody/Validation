@@ -40,7 +40,7 @@ final class Result
         ?string $name = null,
         ?string $id = null,
         public readonly ?Result $adjacent = null,
-        public readonly bool $unchangeableId = false,
+        public readonly string|int|null $path = null,
         Result ...$children,
     ) {
         $this->name = $rule->getName() ?? $name;
@@ -92,6 +92,11 @@ final class Result
         return $adjacent->withInput($input)->withChildren(...$childrenAsAdjacent);
     }
 
+    public function withExtraParameters(array $parameters): self
+    {
+        return $this->clone(parameters: $parameters + $this->parameters);
+    }
+
     public function withTemplate(string $template): self
     {
         return $this->clone(template: $template);
@@ -99,21 +104,17 @@ final class Result
 
     public function withId(string $id): self
     {
-        if ($this->unchangeableId) {
-            return $this;
-        }
-
         return $this->clone(id: $id);
     }
 
-    public function withUnchangeableId(string $id): self
+    public function withPath(string|int $path): self
     {
-        return $this->clone(id: $id, unchangeableId: true);
+        return $this->clone(adjacent: $this->adjacent?->withPath($path), path: $path);
     }
 
     public function withPrefix(string $prefix): self
     {
-        if ($this->id === $this->name || $this->unchangeableId) {
+        if ($this->id === $this->name || $this->path !== null) {
             return $this;
         }
 
@@ -129,7 +130,7 @@ final class Result
     {
         return $this->clone(
             name: $this->name ?? $name,
-            children: array_map(static fn (Result $child) => $child->withNameIfMissing($name), $this->children),
+//            children: array_map(static fn (Result $child) => $child->withNameIfMissing($name), $this->children),
         );
     }
 
@@ -190,30 +191,32 @@ final class Result
     }
 
     /**
+     * @param array<string, mixed> $parameters
      * @param array<Result>|null $children
      */
     private function clone(
         ?bool $isValid = null,
         mixed $input = null,
+        array|null $parameters = null,
         ?string $template = null,
         ?Mode $mode = null,
         ?string $name = null,
         ?string $id = null,
         ?Result $adjacent = null,
-        ?bool $unchangeableId = null,
+        string|int|null $path = null,
         ?array $children = null
     ): self {
         return new self(
             $isValid ?? $this->isValid,
             $input ?? $this->input,
             $this->rule,
-            $this->parameters,
+            $parameters ?? $this->parameters,
             $template ?? $this->template,
             $mode ?? $this->mode,
             $name ?? $this->name,
             $id ?? $this->id,
             $adjacent ?? $this->adjacent,
-            $unchangeableId ?? $this->unchangeableId,
+            $path ?? $this->path,
             ...($children ?? $this->children)
         );
     }

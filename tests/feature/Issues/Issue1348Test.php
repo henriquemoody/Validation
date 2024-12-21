@@ -24,57 +24,57 @@ test('https://github.com/Respect/Validation/issues/1289', expectAll(
             v::key('manufacturer', v::equals('Ford'))->key('model', Validator::in(['F150', 'Bronco'])),
         ),
     )->assert($cars),
-    'manufacturer must be equal to "Honda"',
+    '`.2.manufacturer` must be equal to "Honda"',
     <<<'FULL_MESSAGE'
     - Each item in `[["manufacturer": "Honda", "model": "Accord"], ["manufacturer": "Toyota", "model": "Rav4"], ["manufacturer": "Fo ... ]` must be valid
-      - Only one of these rules must pass for `["manufacturer": "Ford", "model": "not real"]`
+      - Only one of these rules must pass for `.2`
         - All the required rules must pass for `["manufacturer": "Ford", "model": "not real"]`
-          - manufacturer must be equal to "Honda"
-          - model must be in `["Accord", "Fit"]`
+          - `.manufacturer` must be equal to "Honda"
+          - `.model` must be in `["Accord", "Fit"]`
         - All the required rules must pass for `["manufacturer": "Ford", "model": "not real"]`
-          - manufacturer must be equal to "Toyota"
-          - model must be in `["Rav4", "Camry"]`
+          - `.manufacturer` must be equal to "Toyota"
+          - `.model` must be in `["Rav4", "Camry"]`
         - These rules must pass for `["manufacturer": "Ford", "model": "not real"]`
-          - model must be in `["F150", "Bronco"]`
-      - Only one of these rules must pass for `["manufacturer": "Honda", "model": "not valid"]`
+          - `.model` must be in `["F150", "Bronco"]`
+      - Only one of these rules must pass for `.3`
         - These rules must pass for `["manufacturer": "Honda", "model": "not valid"]`
-          - model must be in `["Accord", "Fit"]`
+          - `.model` must be in `["Accord", "Fit"]`
         - All the required rules must pass for `["manufacturer": "Honda", "model": "not valid"]`
-          - manufacturer must be equal to "Toyota"
-          - model must be in `["Rav4", "Camry"]`
+          - `.manufacturer` must be equal to "Toyota"
+          - `.model` must be in `["Rav4", "Camry"]`
         - All the required rules must pass for `["manufacturer": "Honda", "model": "not valid"]`
-          - manufacturer must be equal to "Ford"
-          - model must be in `["F150", "Bronco"]`
+          - `.manufacturer` must be equal to "Ford"
+          - `.model` must be in `["F150", "Bronco"]`
     FULL_MESSAGE,
     [
         'each' => [
             '__root__' => 'Each item in `[["manufacturer": "Honda", "model": "Accord"], ["manufacturer": "Toyota", "model": "Rav4"], ["manufacturer": "Fo ... ]` must be valid',
             2 => [
-                '__root__' => 'Only one of these rules must pass for `["manufacturer": "Ford", "model": "not real"]`',
+                '__root__' => 'Only one of these rules must pass for `.2`',
                 'allOf.1' => [
                     '__root__' => 'All the required rules must pass for `["manufacturer": "Ford", "model": "not real"]`',
-                    'manufacturer' => 'manufacturer must be equal to "Honda"',
-                    'model' => 'model must be in `["Accord", "Fit"]`',
+                    'manufacturer' => '`.manufacturer` must be equal to "Honda"',
+                    'model' => '`.model` must be in `["Accord", "Fit"]`',
                 ],
                 'allOf.2' => [
                     '__root__' => 'All the required rules must pass for `["manufacturer": "Ford", "model": "not real"]`',
-                    'manufacturer' => 'manufacturer must be equal to "Toyota"',
-                    'model' => 'model must be in `["Rav4", "Camry"]`',
+                    'manufacturer' => '`.manufacturer` must be equal to "Toyota"',
+                    'model' => '`.model` must be in `["Rav4", "Camry"]`',
                 ],
-                'allOf.3' => 'model must be in `["F150", "Bronco"]`',
+                'allOf.3' => '`.model` must be in `["F150", "Bronco"]`',
             ],
             3 => [
-                '__root__' => 'Only one of these rules must pass for `["manufacturer": "Honda", "model": "not valid"]`',
-                'allOf.1' => 'model must be in `["Accord", "Fit"]`',
+                '__root__' => 'Only one of these rules must pass for `.3`',
+                'allOf.1' => '`.model` must be in `["Accord", "Fit"]`',
                 'allOf.2' => [
                     '__root__' => 'All the required rules must pass for `["manufacturer": "Honda", "model": "not valid"]`',
-                    'manufacturer' => 'manufacturer must be equal to "Toyota"',
-                    'model' => 'model must be in `["Rav4", "Camry"]`',
+                    'manufacturer' => '`.manufacturer` must be equal to "Toyota"',
+                    'model' => '`.model` must be in `["Rav4", "Camry"]`',
                 ],
                 'allOf.3' => [
                     '__root__' => 'All the required rules must pass for `["manufacturer": "Honda", "model": "not valid"]`',
-                    'manufacturer' => 'manufacturer must be equal to "Ford"',
-                    'model' => 'model must be in `["F150", "Bronco"]`',
+                    'manufacturer' => '`.manufacturer` must be equal to "Ford"',
+                    'model' => '`.model` must be in `["F150", "Bronco"]`',
                 ],
             ],
         ],

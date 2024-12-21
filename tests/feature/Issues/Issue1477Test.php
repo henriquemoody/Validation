@@ -21,7 +21,7 @@ test('https://github.com/Respect/Validation/issues/1477', expectAll(
             })->setTemplate('{{name}} is not good!'),
         )->assert(['Address' => 'cvejvn']);
     },
-    'Address is not good!',
-    '- Address is not good!',
-    ['Address' => 'Address is not good!'],
+    '`.Address` is not good!',
+    '- `.Address` is not good!',
+    ['Address' => '`.Address` is not good!'],
 ));

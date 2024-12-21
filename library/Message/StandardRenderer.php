@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Respect\Validation\Message;
 
 use ReflectionClass;
+use Respect\Stringifier\Quoter;
+use Respect\Stringifier\Quoters\StandardQuoter;
 use Respect\Stringifier\Stringifier;
 use Respect\Stringifier\Stringifiers\CompositeStringifier;
 use Respect\Validation\Mode;
@@ -29,15 +31,17 @@ final class StandardRenderer implements Renderer
 
     private readonly Stringifier $stringifier;
 
-    public function __construct(?Stringifier $stringifier = null)
-    {
+    public function __construct(
+        ?Stringifier $stringifier = null,
+        private readonly Quoter $quoter = new StandardQuoter(120)
+    ) {
         $this->stringifier = $stringifier ?? CompositeStringifier::createDefault();
     }
 
     public function render(Result $result, Translator $translator, ?string $template = null): string
     {
         $parameters = $result->parameters;
-        $parameters['name'] ??= $result->name ?? $this->placeholder('input', $result->input, $translator);
+        $parameters['name'] ??= $result->name ?? ($result->path !== null ? $this->quoter->quote('.' . $result->path, 0) : null) ?? $this->placeholder('input', $result->input, $translator);
         $parameters['input'] = $result->input;
 
         $rendered = (string) preg_replace_callback(

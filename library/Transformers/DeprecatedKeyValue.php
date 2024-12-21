@@ -16,7 +16,6 @@ use Respect\Validation\Rules\Lazy;
 use Respect\Validation\Validator;
 use Throwable;
 
-use function sprintf;
 use function trigger_error;
 
 use const E_USER_DEPRECATED;
@@ -50,15 +49,13 @@ final class DeprecatedKeyValue implements Transformer
                     try {
                         return new Key($comparedKey, Validator::__callStatic($ruleName, [$input[$baseKey]]));
                     } catch (Throwable) {
-                        $rule = new AlwaysInvalid();
-                        $rule->setName($comparedKey);
-                        $rule->setTemplate(sprintf(
-                            '%s must be valid to validate %s',
-                            $baseKey,
-                            $comparedKey,
-                        ));
-
-                        return $rule;
+                        return (new AlwaysInvalid())
+                            ->evaluate($baseKey)
+                            ->withPath($baseKey)
+                            ->withTemplate('{{name}} must be valid to validate {{comparedKey}}')
+                            ->withExtraParameters([
+                                'comparedKey' => $comparedKey,
+                            ]);
                     }
                 }
             ),

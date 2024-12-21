@@ -23,35 +23,35 @@ test('Empty', expectAll(
 
 test('Default', expectAll(
     fn() => v::each(v::intType())->assert(['a', 'b', 'c']),
-    '"a" must be an integer',
+    '`.0` must be an integer',
     <<<'FULL_MESSAGE'
     - Each item in `["a", "b", "c"]` must be valid
-      - "a" must be an integer
-      - "b" must be an integer
-      - "c" must be an integer
+      - `.0` must be an integer
+      - `.1` must be an integer
+      - `.2` must be an integer
     FULL_MESSAGE,
     [
         '__root__' => 'Each item in `["a", "b", "c"]` must be valid',
-        0 => '"a" must be an integer',
-        1 => '"b" must be an integer',
-        2 => '"c" must be an integer',
+        0 => '`.0` must be an integer',
+        1 => '`.1` must be an integer',
+        2 => '`.2` must be an integer',
     ],
 ));
 
 test('Inverted', expectAll(
     fn() => v::not(v::each(v::intType()))->assert([1, 2, 3]),
-    '1 must not be an integer',
+    '`.0` must not be an integer',
     <<<'FULL_MESSAGE'
     - Each item in `[1, 2, 3]` must be invalid
-      - 1 must not be an integer
-      - 2 must not be an integer
-      - 3 must not be an integer
+      - `.0` must not be an integer
+      - `.1` must not be an integer
+      - `.2` must not be an integer
     FULL_MESSAGE,
     [
         '__root__' => 'Each item in `[1, 2, 3]` must be invalid',
-        0 => '1 must not be an integer',
-        1 => '2 must not be an integer',
-        2 => '3 must not be an integer',
+        0 => '`.0` must not be an integer',
+        1 => '`.1` must not be an integer',
+        2 => '`.2` must not be an integer',
     ],
 ));
 
@@ -225,42 +225,42 @@ test('With array template and name, default', expectAll(
             ],
         ])
         ->assert(['a', 'b', 'c']),
-    'Wrapped must be an integer',
+    'First item should have been an integer',
     <<<'FULL_MESSAGE'
-    - Each item in Wrapped must be valid
-      - Wrapped must be an integer
-      - Wrapped must be an integer
-      - Wrapped must be an integer
+    - Here a sequence of items that did not pass the validation
+      - First item should have been an integer
+      - Second item should have been an integer
+      - Third item should have been an integer
     FULL_MESSAGE,
     [
-        '__root__' => 'Each item in Wrapped must be valid',
-        0 => 'Wrapped must be an integer',
-        1 => 'Wrapped must be an integer',
-        2 => 'Wrapped must be an integer',
+        '__root__' => 'Here a sequence of items that did not pass the validation',
+        0 => 'First item should have been an integer',
+        1 => 'Second item should have been an integer',
+        2 => 'Third item should have been an integer',
     ],
 ));
 
 test('Chained wrapped rule', expectAll(
     fn() => v::each(v::between(5, 7)->odd())->assert([2, 4]),
-    '2 must be between 5 and 7',
+    '`.0` must be between 5 and 7',
     <<<'FULL_MESSAGE'
     - Each item in `[2, 4]` must be valid
-      - All the required rules must pass for 2
+      - All the required rules must pass for `.0`
         - 2 must be between 5 and 7
         - 2 must be an odd number
-      - All the required rules must pass for 4
+      - All the required rules must pass for `.1`
         - 4 must be between 5 and 7
         - 4 must be an odd number
     FULL_MESSAGE,
     [
         '__root__' => 'Each item in `[2, 4]` must be valid',
         0 => [
-            '__root__' => 'All the required rules must pass for 2',
+            '__root__' => 'All the required rules must pass for `.0`',
             'between' => '2 must be between 5 and 7',
             'odd' => '2 must be an odd number',
         ],
         1 => [
-            '__root__' => 'All the required rules must pass for 4',
+            '__root__' => 'All the required rules must pass for `.1`',
             'between' => '4 must be between 5 and 7',
             'odd' => '4 must be an odd number',
         ],
@@ -269,16 +269,16 @@ test('Chained wrapped rule', expectAll(
 
 test('Multiple nested rules', expectAll(
     fn() => v::each(v::arrayType()->key('my_int', v::intType()->odd()))->assert([['not_int' => 'wrong'], ['my_int' => 2], 'not an array']),
-    'my_int must be present',
+    '`.0.my_int` must be present',
     <<<'FULL_MESSAGE'
     - Each item in `[["not_int": "wrong"], ["my_int": 2], "not an array"]` must be valid
-      - These rules must pass for `["not_int": "wrong"]`
-        - my_int must be present
-      - These rules must pass for `["my_int": 2]`
-        - my_int must be an odd number
-      - All the required rules must pass for "not an array"
+      - These rules must pass for `.0`
+        - `.my_int` must be present
+      - These rules must pass for `.1`
+        - `.my_int` must be an odd number
+      - All the required rules must pass for `.2`
         - "not an array" must be an array
-        - my_int must be present
+        - `.my_int` must be present
     FULL_MESSAGE,
     [
         '__root__' => 'Each item in `[["not_int": "wrong"], ["my_int": 2], "not an array"]` must be valid',

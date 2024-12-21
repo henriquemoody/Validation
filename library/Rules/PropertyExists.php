@@ -32,7 +32,7 @@ final class PropertyExists extends Standard
     public function evaluate(mixed $input): Result
     {
         if (!is_object($input)) {
-            return Result::failed($input, $this)->withNameIfMissing($this->propertyName)->withId($this->propertyName);
+            return Result::failed($input, $this)->withPath($this->propertyName);
         }
 
         $reflection = new ReflectionObject($input);
@@ -41,8 +41,7 @@ final class PropertyExists extends Standard
             $reflection->hasProperty($this->propertyName),
             $input,
             $this,
-            name: $this->propertyName,
-            id: $this->propertyName
+            path: $this->propertyName
         );
     }
 }

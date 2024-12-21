@@ -25,7 +25,6 @@ final class Property extends Wrapper
         private readonly string $propertyName,
         Rule $rule,
     ) {
-        $rule->setName($rule->getName() ?? $propertyName);
         parent::__construct($rule);
     }
 
@@ -36,9 +35,8 @@ final class Property extends Wrapper
             return $propertyExistsResult;
         }
 
-        return $this->rule
+        return (new Binder($this, $this->rule))
             ->evaluate($this->extractPropertyValue($input, $this->propertyName))
-            ->withUnchangeableId($this->propertyName)
-            ->withNameIfMissing($this->rule->getName() ?? $this->propertyName);
+            ->withPath($this->propertyName);
     }
 }

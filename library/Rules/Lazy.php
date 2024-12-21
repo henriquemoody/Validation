@@ -21,10 +21,10 @@ use function call_user_func;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Lazy extends Standard
 {
-    /** @var callable(mixed): Rule */
+    /** @var callable(mixed): Rule|callable(mixed): Result */
     private $ruleCreator;
 
-    /** @param callable(mixed): Rule $ruleCreator */
+    /** @param callable(mixed): Rule|callable(mixed): Result $ruleCreator */
     public function __construct(callable $ruleCreator)
     {
         $this->ruleCreator = $ruleCreator;
@@ -32,11 +32,15 @@ final class Lazy extends Standard
 
     public function evaluate(mixed $input): Result
     {
-        $rule = call_user_func($this->ruleCreator, $input);
-        if (!$rule instanceof Rule) {
+        $return = call_user_func($this->ruleCreator, $input);
+        if ($return instanceof Result) {
+            return $return;
+        }
+
+        if (!$return instanceof Rule) {
             throw new ComponentException('Lazy failed because it could not create the rule');
         }
 
-        return (new Binder($this, $rule))->evaluate($input);
+        return (new Binder($this, $return))->evaluate($input);
     }
 }
