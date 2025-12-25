@@ -26,19 +26,28 @@ final readonly class Result
     /** @param array<string, mixed> $parameters */
     public function __construct(
         public bool $hasPassed,
-        public mixed $input,
+        public Subject $subject,
         public Rule $rule,
         public array $parameters = [],
         public string $template = Rule::TEMPLATE_STANDARD,
         public bool $hasInvertedMode = false,
-        public Name|null $name = null,
         Id|null $id = null,
         public Result|null $adjacent = null,
-        public Path|null $path = null,
         Result ...$children,
     ) {
         $this->id = $id ?? Id::fromRule($rule);
         $this->children = $children;
+    }
+
+    /** @param array<string, mixed> $parameters */
+    public static function of(
+        bool $hasPassed,
+        mixed $input,
+        Rule $rule,
+        array $parameters = [],
+        string $template = Rule::TEMPLATE_STANDARD,
+    ): self {
+        return new self($hasPassed, new Subject($input), $rule, $parameters, $template);
     }
 
     /** @param array<string, mixed> $parameters */
@@ -48,7 +57,7 @@ final readonly class Result
         array $parameters = [],
         string $template = Rule::TEMPLATE_STANDARD,
     ): self {
-        return new self(false, $input, $rule, $parameters, $template);
+        return self::of(false, $input, $rule, $parameters, $template);
     }
 
     /** @param array<string, mixed> $parameters */
@@ -58,7 +67,7 @@ final readonly class Result
         array $parameters = [],
         string $template = Rule::TEMPLATE_STANDARD,
     ): self {
-        return new self(true, $input, $rule, $parameters, $template);
+        return self::of(true, $input, $rule, $parameters, $template);
     }
 
     /** @param array<string, mixed> $parameters */
@@ -70,15 +79,17 @@ final readonly class Result
         array $parameters = [],
         string $template = Rule::TEMPLATE_STANDARD,
     ): Result {
+        $subject = $adjacent->subject->withInput($input);
         if ($adjacent->allowsAdjacent()) {
-            return (new Result(
+            return new Result(
                 $adjacent->hasPassed,
-                $input,
+                $subject,
                 $rule,
                 $parameters,
                 $template,
                 id: $adjacent->id->withPrefix($prefix),
-            ))->withAdjacent($adjacent->withInput($input));
+                adjacent: $adjacent->withSubject($subject),
+            );
         }
 
         $childrenAsAdjacent = array_map(
@@ -86,7 +97,7 @@ final readonly class Result
             $adjacent->children,
         );
 
-        return $adjacent->withInput($input)->withChildren(...$childrenAsAdjacent);
+        return $adjacent->withSubject($subject)->withChildren(...$childrenAsAdjacent);
     }
 
     public function withTemplate(string $template): self
@@ -113,18 +124,8 @@ final readonly class Result
 
     public function withPath(Path $path): self
     {
-        if ($this->path === $path) {
-            return $this;
-        }
-
-        if ($this->path !== null) {
-            $this->path->parent = $path;
-
-            return $this;
-        }
-
         return clone($this, [
-            'path' => $path,
+            'subject' => $this->subject->withPath($path),
             'adjacent' => $this->adjacent?->withPath($path),
             'children' => array_map(
                 static fn(Result $child) => $child->withPath($path),
@@ -135,15 +136,11 @@ final readonly class Result
 
     public function withoutName(): self
     {
-        if ($this->name === null) {
-            return $this;
-        }
-
         return clone ($this, [
-            'name' => null,
+            'subject' => $this->subject->withoutName(),
             'adjacent' => $this->adjacent?->withoutName(),
             'children' => array_map(
-                fn(Result $child) => $child->name === $this->name ? $child->withoutName() : $child,
+                fn(Result $child) => $child->subject->name === $this->subject->name ? $child->withoutName() : $child,
                 $this->children,
             ),
         ]);
@@ -151,24 +148,20 @@ final readonly class Result
 
     public function withChildren(Result ...$children): self
     {
-        if ($this->path === null) {
+        if ($this->subject->path === null) {
             return clone($this, ['children' => $children]);
         }
 
-        return clone($this, ['children' => array_map(fn(Result $child) => $child->withPath($this->path), $children)]);
+        return clone($this, ['children' => array_map(fn(Result $child) => $child->withPath($this->subject->path), $children)]);
     }
 
     public function withName(Name $name): self
     {
-        if ($this->path !== null && $this->name?->path !== $this->path) {
-            $name = $name->withPath($this->path);
-        }
-
         return clone($this, [
-            'name' => $this->name ?? $name,
+            'subject' => $this->subject->withName($name),
             'adjacent' => $this->adjacent?->withName($name),
             'children' => array_map(
-                static fn(Result $child) => $child->path === null ? $child->withName($child->name ?? $name) : $child,
+                static fn(Result $child) => $child->withName($name),
                 $this->children,
             ),
         ]);
@@ -178,7 +171,7 @@ final readonly class Result
     {
         if ($rule instanceof Nameable && $rule->getName() !== null) {
             return clone($this, [
-                'name' => $this->name ?? $rule->getName(),
+                'subject' => $this->subject->withName2($rule->getName()),
                 'adjacent' => $this->adjacent?->withNameFrom($rule),
                 'children' => array_map(
                     static fn(Result $child) => $child->withNameFrom($rule),
@@ -190,14 +183,14 @@ final readonly class Result
         return $this;
     }
 
-    public function withInput(mixed $input): self
+    public function withSubject(mixed $input): self
     {
-        $currentInput = $this->input;
+        $currentInput = $this->subject;
 
         return clone($this, [
-            'input' => $input,
+            'subject' => $input,
             'children' => array_map(
-                static fn(Result $child) => $child->input === $currentInput ? $child->withInput($input) : $child,
+                static fn(Result $child) => $child->subject === $currentInput ? $child->withSubject($input) : $child,
                 $this->children,
             ),
         ]);
