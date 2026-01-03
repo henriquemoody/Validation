@@ -16,8 +16,6 @@ interface NullOrChain
 {
     public function nullOrAll(Rule $rule): Chain;
 
-    public function nullOrAllOf(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public function nullOrAlnum(string ...$additionalChars): Chain;
 
     public function nullOrAlpha(string ...$additionalChars): Chain;
@@ -206,6 +204,8 @@ interface NullOrChain
     public function nullOrLessThan(mixed $compareTo): Chain;
 
     public function nullOrLessThanOrEqual(mixed $compareTo): Chain;
+
+    public function nullOrLogicAnd(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public function nullOrLowercase(): Chain;
 

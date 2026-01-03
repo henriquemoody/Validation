@@ -1,16 +1,16 @@
-# AllOf
+# LogicAnd
 
-- `AllOf(Rule $rule1, Rule $rule2, Rule ...$rule)`
+- `LogicAnd(Rule $rule1, Rule $rule2, Rule ...$rule)`
 
 Will validate if all inner validators validates.
 
 ```php
-v::allOf(v::intVal(), v::positive())->isValid(15); // true
+v::logicAnd(v::intVal(), v::positive())->isValid(15); // true
 ```
 
 ## Templates
 
-### `AllOf::TEMPLATE_SOME`
+### `LogicAnd::TEMPLATE_SOME`
 
 Used when some rules must be failed.
 
@@ -19,7 +19,7 @@ Used when some rules must be failed.
 | `default`  | {{subject}} must pass the rules |
 | `inverted` | {{subject}} must pass the rules |
 
-### `AllOf::TEMPLATE_ALL`
+### `LogicAnd::TEMPLATE_ALL`
 
 Used when all rules have failed.
 

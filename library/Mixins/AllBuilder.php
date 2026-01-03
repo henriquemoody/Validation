@@ -14,8 +14,6 @@ use Respect\Validation\Rule;
 
 interface AllBuilder
 {
-    public static function allAllOf(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public static function allAlnum(string ...$additionalChars): Chain;
 
     public static function allAlpha(string ...$additionalChars): Chain;
@@ -194,6 +192,8 @@ interface AllBuilder
     public static function allLessThan(mixed $compareTo): Chain;
 
     public static function allLessThanOrEqual(mixed $compareTo): Chain;
+
+    public static function allLogicAnd(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public static function allLowercase(): Chain;
 

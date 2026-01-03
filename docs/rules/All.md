@@ -19,8 +19,8 @@ This rule uses [Length](Length.md) with [GreaterThan][GreaterThan.md] internally
 
 ### `All::TEMPLATE_STANDARD`
 
-| Mode       | Template     |
-| ---------- | ------------ |
+| Mode       | Template      |
+| ---------- | ------------- |
 | `default`  | Every item in |
 | `inverted` | Every item in |
 

@@ -37,7 +37,7 @@ Respect\Validation offers over 150 rules, many of which are designed to address 
 - Validating **Array structures**: [KeySet](rules/KeySet.md).
 - Validating **Object properties**: [Property](rules/Property.md), [PropertyOptional](rules/PropertyOptional.md), [PropertyExists](rules/PropertyExists.md).
 - Using **Conditional validation**: [NullOr](rules/NullOr.md), [UndefOr](rules/UndefOr.md), [When](rules/When.md).
-- Using **Grouped validation**: [AllOf](rules/AllOf.md), [AnyOf](rules/AnyOf.md), [NoneOf](rules/NoneOf.md), [OneOf](rules/OneOf.md)
+- Using **Grouped validation**: [LogicAnd](rules/LogicAnd.md), [AnyOf](rules/AnyOf.md), [NoneOf](rules/NoneOf.md), [OneOf](rules/OneOf.md)
 - Validating **Each** value in the input: [Each](rules/Each.md).
 - Validating the **Length** of the input: [Length](rules/Length.md).
 - Validating the **Maximum** value in the input: [Max](rules/Max.md).

@@ -16,8 +16,6 @@ interface UndefOrBuilder
 {
     public static function undefOrAll(Rule $rule): Chain;
 
-    public static function undefOrAllOf(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public static function undefOrAlnum(string ...$additionalChars): Chain;
 
     public static function undefOrAlpha(string ...$additionalChars): Chain;
@@ -204,6 +202,8 @@ interface UndefOrBuilder
     public static function undefOrLessThan(mixed $compareTo): Chain;
 
     public static function undefOrLessThanOrEqual(mixed $compareTo): Chain;
+
+    public static function undefOrLogicAnd(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public static function undefOrLowercase(): Chain;
 

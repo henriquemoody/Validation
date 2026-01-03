@@ -16,8 +16,6 @@ interface KeyChain
 {
     public function keyAll(int|string $key, Rule $rule): Chain;
 
-    public function keyAllOf(int|string $key, Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public function keyAlnum(int|string $key, string ...$additionalChars): Chain;
 
     public function keyAlpha(int|string $key, string ...$additionalChars): Chain;
@@ -198,6 +196,8 @@ interface KeyChain
     public function keyLessThan(int|string $key, mixed $compareTo): Chain;
 
     public function keyLessThanOrEqual(int|string $key, mixed $compareTo): Chain;
+
+    public function keyLogicAnd(int|string $key, Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public function keyLowercase(int|string $key): Chain;
 

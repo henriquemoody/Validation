@@ -29,8 +29,6 @@ interface Chain extends
 {
     public function all(Rule $rule): Chain;
 
-    public function allOf(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public function alnum(string ...$additionalChars): Chain;
 
     public function alpha(string ...$additionalChars): Chain;
@@ -221,6 +219,8 @@ interface Chain extends
     public function lessThan(mixed $compareTo): Chain;
 
     public function lessThanOrEqual(mixed $compareTo): Chain;
+
+    public function logicAnd(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public function lowercase(): Chain;
 

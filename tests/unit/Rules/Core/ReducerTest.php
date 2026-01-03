@@ -12,7 +12,7 @@ namespace Respect\Validation\Rules\Core;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Respect\Validation\Rules\AllOf;
+use Respect\Validation\Rules\LogicAnd;
 use Respect\Validation\Test\Rules\Stub;
 
 #[CoversClass(Reducer::class)]
@@ -39,7 +39,7 @@ final class ReducerTest extends TestCase
         $reducer = new Reducer($rule1, $rule2, $rule3);
         $result = $reducer->evaluate(null);
 
-        self::assertEquals(new AllOf($rule1, $rule2, $rule3), $result->rule);
+        self::assertEquals(new LogicAnd($rule1, $rule2, $rule3), $result->rule);
     }
 
     #[Test]

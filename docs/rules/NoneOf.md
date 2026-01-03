@@ -55,9 +55,9 @@ Used when all rules have passed.
 
 See also:
 
-- [AllOf](AllOf.md)
 - [AnyOf](AnyOf.md)
 - [Circuit](Circuit.md)
+- [LogicAnd](LogicAnd.md)
 - [Not](Not.md)
 - [OneOf](OneOf.md)
 - [When](When.md)

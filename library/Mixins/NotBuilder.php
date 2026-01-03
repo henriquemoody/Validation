@@ -16,8 +16,6 @@ interface NotBuilder
 {
     public static function notAll(Rule $rule): Chain;
 
-    public static function notAllOf(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public static function notAlnum(string ...$additionalChars): Chain;
 
     public static function notAlpha(string ...$additionalChars): Chain;
@@ -206,6 +204,8 @@ interface NotBuilder
     public static function notLessThan(mixed $compareTo): Chain;
 
     public static function notLessThanOrEqual(mixed $compareTo): Chain;
+
+    public static function notLogicAnd(Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public static function notLowercase(): Chain;
 

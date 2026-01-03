@@ -60,9 +60,9 @@
 
 ## Composite
 
-- [AllOf](rules/AllOf.md)
 - [AnyOf](rules/AnyOf.md)
 - [Circuit](rules/Circuit.md)
+- [LogicAnd](rules/LogicAnd.md)
 - [NoneOf](rules/NoneOf.md)
 - [OneOf](rules/OneOf.md)
 
@@ -169,7 +169,6 @@
 
 ## Nesting
 
-- [AllOf](rules/AllOf.md)
 - [AnyOf](rules/AnyOf.md)
 - [Call](rules/Call.md)
 - [Circuit](rules/Circuit.md)
@@ -177,6 +176,7 @@
 - [Key](rules/Key.md)
 - [KeySet](rules/KeySet.md)
 - [Lazy](rules/Lazy.md)
+- [LogicAnd](rules/LogicAnd.md)
 - [NoneOf](rules/NoneOf.md)
 - [Not](rules/Not.md)
 - [NullOr](rules/NullOr.md)
@@ -305,7 +305,6 @@
 ## Alphabetically
 
 - [All](rules/All.md)
-- [AllOf](rules/AllOf.md)
 - [Alnum](rules/Alnum.md)
 - [Alpha](rules/Alpha.md)
 - [AlwaysInvalid](rules/AlwaysInvalid.md)
@@ -394,6 +393,7 @@
 - [Length](rules/Length.md)
 - [LessThan](rules/LessThan.md)
 - [LessThanOrEqual](rules/LessThanOrEqual.md)
+- [LogicAnd](rules/LogicAnd.md)
 - [Lowercase](rules/Lowercase.md)
 - [Luhn](rules/Luhn.md)
 - [MacAddress](rules/MacAddress.md)

@@ -16,8 +16,6 @@ interface PropertyChain
 {
     public function propertyAll(string $propertyName, Rule $rule): Chain;
 
-    public function propertyAllOf(string $propertyName, Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
-
     public function propertyAlnum(string $propertyName, string ...$additionalChars): Chain;
 
     public function propertyAlpha(string $propertyName, string ...$additionalChars): Chain;
@@ -198,6 +196,8 @@ interface PropertyChain
     public function propertyLessThan(string $propertyName, mixed $compareTo): Chain;
 
     public function propertyLessThanOrEqual(string $propertyName, mixed $compareTo): Chain;
+
+    public function propertyLogicAnd(string $propertyName, Rule $rule1, Rule $rule2, Rule ...$rules): Chain;
 
     public function propertyLowercase(string $propertyName): Chain;
 
