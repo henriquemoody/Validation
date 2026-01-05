@@ -1,10 +1,19 @@
 site_name: Respect\Validation
-theme: readthedocs
+theme:
+  name: readthedocs
+  highlightjs: false
+
+extra_css:
+  - css/pygments.css
 
 markdown_extensions:
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
   - pymdownx.superfences
+  - pymdownx.highlight:
+      use_pygments: true
+      pygments_style: default
+      pygments_lang_class: true
+      extend_pygments_lang:
+        - name: php
+          lang: php
+          options:
+            startinline: true
