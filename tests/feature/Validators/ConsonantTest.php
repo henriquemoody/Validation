@@ -7,42 +7,34 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard consonant template validation', catchAll(
     fn() => v::consonant()->assert('aeiou'),
-    fn(string $message) => expect($message)->toBe('"aeiou" must only contain consonants'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"aeiou" must only contain consonants')
+        ->and($fullMessage)->toBe('- "aeiou" must only contain consonants')
+        ->and($messages)->toBe(['consonant' => '"aeiou" must only contain consonants']),
 ));
 
-test('Scenario #2', catchMessage(
-    fn() => v::consonant('d')->assert('daeiou'),
-    fn(string $message) => expect($message)->toBe('"daeiou" must only contain consonants and "d"'),
-));
-
-test('Scenario #3', catchMessage(
+test('Standard consonant template validation (inverted)', catchAll(
     fn() => v::not(v::consonant())->assert('bcd'),
-    fn(string $message) => expect($message)->toBe('"bcd" must not contain consonants'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"bcd" must not contain consonants')
+        ->and($fullMessage)->toBe('- "bcd" must not contain consonants')
+        ->and($messages)->toBe(['notConsonant' => '"bcd" must not contain consonants']),
 ));
 
-test('Scenario #4', catchMessage(
-    fn() => v::not(v::consonant('a'))->assert('abcd'),
-    fn(string $message) => expect($message)->toBe('"abcd" must not contain consonants or "a"'),
-));
-
-test('Scenario #5', catchFullMessage(
-    fn() => v::consonant()->assert('aeiou'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "aeiou" must only contain consonants'),
-));
-
-test('Scenario #6', catchFullMessage(
+test('Extra consonant template validation with additional characters', catchAll(
     fn() => v::consonant('d')->assert('daeiou'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "daeiou" must only contain consonants and "d"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"daeiou" must only contain consonants and "d"')
+        ->and($fullMessage)->toBe('- "daeiou" must only contain consonants and "d"')
+        ->and($messages)->toBe(['consonant' => '"daeiou" must only contain consonants and "d"']),
 ));
 
-test('Scenario #7', catchFullMessage(
-    fn() => v::not(v::consonant())->assert('bcd'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "bcd" must not contain consonants'),
-));
-
-test('Scenario #8', catchFullMessage(
+test('Extra consonant template validation with additional characters (inverted)', catchAll(
     fn() => v::not(v::consonant('a'))->assert('abcd'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "abcd" must not contain consonants or "a"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"abcd" must not contain consonants or "a"')
+        ->and($fullMessage)->toBe('- "abcd" must not contain consonants or "a"')
+        ->and($messages)->toBe(['notConsonant' => '"abcd" must not contain consonants or "a"']),
 ));

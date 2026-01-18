@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::floatVal()->assert('a'),
-    fn(string $message) => expect($message)->toBe('"a" must be a float value'),
+test('Standard float template validation', catchAll(
+    fn() => v::floatVal()->assert('abc'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"abc" must be a float value')
+        ->and($fullMessage)->toBe('- "abc" must be a float value')
+        ->and($messages)->toBe(['floatVal' => '"abc" must be a float value']),
 ));
 
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::floatVal())->assert(165.0),
-    fn(string $message) => expect($message)->toBe('165.0 must not be a float value'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::floatVal()->assert('a'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "a" must be a float value'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::floatVal())->assert('165.7'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "165.7" must not be a float value'),
+test('Standard float template validation (inverted)', catchAll(
+    fn() => v::not(v::floatVal())->assert(1.5),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('1.5 must not be a float value')
+        ->and($fullMessage)->toBe('- 1.5 must not be a float value')
+        ->and($messages)->toBe(['notFloatVal' => '1.5 must not be a float value']),
 ));

@@ -7,42 +7,34 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard alpha template validation', catchAll(
     fn() => v::alpha()->assert('aaa%a'),
-    fn(string $message) => expect($message)->toBe('"aaa%a" must contain only letters (a-z)'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"aaa%a" must contain only letters (a-z)')
+        ->and($fullMessage)->toBe('- "aaa%a" must contain only letters (a-z)')
+        ->and($messages)->toBe(['alpha' => '"aaa%a" must contain only letters (a-z)']),
 ));
 
-test('Scenario #2', catchMessage(
-    fn() => v::alpha(' ')->assert('bbb%b'),
-    fn(string $message) => expect($message)->toBe('"bbb%b" must contain only letters (a-z) and " "'),
-));
-
-test('Scenario #3', catchMessage(
+test('Standard alpha template validation (inverted)', catchAll(
     fn() => v::not(v::alpha())->assert('ccccc'),
-    fn(string $message) => expect($message)->toBe('"ccccc" must not contain letters (a-z)'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"ccccc" must not contain letters (a-z)')
+        ->and($fullMessage)->toBe('- "ccccc" must not contain letters (a-z)')
+        ->and($messages)->toBe(['notAlpha' => '"ccccc" must not contain letters (a-z)']),
 ));
 
-test('Scenario #4', catchMessage(
-    fn() => v::not(v::alpha('% '))->assert('ddd%d'),
-    fn(string $message) => expect($message)->toBe('"ddd%d" must not contain letters (a-z) or "% "'),
+test('Extra alpha template validation with additional characters', catchAll(
+    fn() => v::alpha(' ')->assert('bbb%b'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"bbb%b" must contain only letters (a-z) and " "')
+        ->and($fullMessage)->toBe('- "bbb%b" must contain only letters (a-z) and " "')
+        ->and($messages)->toBe(['alpha' => '"bbb%b" must contain only letters (a-z) and " "']),
 ));
 
-test('Scenario #5', catchFullMessage(
-    fn() => v::alpha()->assert('eee^e'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "eee^e" must contain only letters (a-z)'),
-));
-
-test('Scenario #6', catchFullMessage(
-    fn() => v::not(v::alpha())->assert('fffff'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "fffff" must not contain letters (a-z)'),
-));
-
-test('Scenario #7', catchFullMessage(
-    fn() => v::alpha('* &%')->assert('ggg^g'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "ggg^g" must contain only letters (a-z) and "* &%"'),
-));
-
-test('Scenario #8', catchFullMessage(
-    fn() => v::not(v::alpha('^'))->assert('hhh^h'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "hhh^h" must not contain letters (a-z) or "^"'),
+test('Extra alpha template validation with additional characters (inverted)', catchAll(
+    fn() => v::not(v::alpha(' '))->assert('dddd'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"dddd" must not contain letters (a-z) or " "')
+        ->and($fullMessage)->toBe('- "dddd" must not contain letters (a-z) or " "')
+        ->and($messages)->toBe(['notAlpha' => '"dddd" must not contain letters (a-z) or " "']),
 ));
