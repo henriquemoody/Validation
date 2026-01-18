@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard uppercase template validation', catchAll(
     fn() => v::uppercase()->assert('lowercase'),
-    fn(string $message) => expect($message)->toBe('"lowercase" must contain only uppercase letters'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"lowercase" must contain only uppercase letters')
+        ->and($fullMessage)->toBe('- "lowercase" must contain only uppercase letters')
+        ->and($messages)->toBe(['uppercase' => '"lowercase" must contain only uppercase letters']),
 ));
 
-test('Scenario #2', catchFullMessage(
-    fn() => v::uppercase()->assert('lowercase'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "lowercase" must contain only uppercase letters'),
-));
-
-test('Scenario #3', catchMessage(
+test('Standard uppercase template validation (inverted)', catchAll(
     fn() => v::not(v::uppercase())->assert('UPPERCASE'),
-    fn(string $message) => expect($message)->toBe('"UPPERCASE" must not contain only uppercase letters'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::uppercase())->assert('UPPERCASE'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "UPPERCASE" must not contain only uppercase letters'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"UPPERCASE" must not contain only uppercase letters')
+        ->and($fullMessage)->toBe('- "UPPERCASE" must not contain only uppercase letters')
+        ->and($messages)->toBe(['notUppercase' => '"UPPERCASE" must not contain only uppercase letters']),
 ));

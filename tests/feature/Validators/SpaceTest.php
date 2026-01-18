@@ -3,46 +3,38 @@
 /*
  * Copyright (c) Alexandre Gomes Gaigalas <alganet@gmail.com>
  * SPDX-License-Identifier: MIT
- */
+*/
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard space template validation', catchAll(
     fn() => v::space()->assert('ab'),
-    fn(string $message) => expect($message)->toBe('"ab" must contain only space characters'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"ab" must contain only space characters')
+        ->and($fullMessage)->toBe('- "ab" must contain only space characters')
+        ->and($messages)->toBe(['space' => '"ab" must contain only space characters']),
 ));
 
-test('Scenario #2', catchMessage(
-    fn() => v::space('c')->assert('cd'),
-    fn(string $message) => expect($message)->toBe('"cd" must contain only space characters and "c"'),
-));
-
-test('Scenario #3', catchMessage(
+test('Standard space template validation (inverted)', catchAll(
     fn() => v::not(v::space())->assert("\t"),
-    fn(string $message) => expect($message)->toBe('"\\t" must not contain space characters'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"\t" must not contain space characters')
+        ->and($fullMessage)->toBe('- "\t" must not contain space characters')
+        ->and($messages)->toBe(['notSpace' => '"\t" must not contain space characters']),
 ));
 
-test('Scenario #4', catchMessage(
-    fn() => v::not(v::space('def'))->assert("\r"),
-    fn(string $message) => expect($message)->toBe('"\\r" must not contain space characters or "def"'),
+test('Extra space template validation with additional characters', catchAll(
+    fn() => v::space('abc')->assert('def'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"def" must contain only space characters and "abc"')
+        ->and($fullMessage)->toBe('- "def" must contain only space characters and "abc"')
+        ->and($messages)->toBe(['space' => '"def" must contain only space characters and "abc"']),
 ));
 
-test('Scenario #5', catchFullMessage(
-    fn() => v::space()->assert('ef'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "ef" must contain only space characters'),
-));
-
-test('Scenario #6', catchFullMessage(
-    fn() => v::space('e')->assert('gh'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "gh" must contain only space characters and "e"'),
-));
-
-test('Scenario #7', catchFullMessage(
-    fn() => v::not(v::space())->assert("\n"),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "\\n" must not contain space characters'),
-));
-
-test('Scenario #8', catchFullMessage(
-    fn() => v::not(v::space('yk'))->assert(' k'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- " k" must not contain space characters or "yk"'),
+test('Extra space template validation with additional characters (inverted)', catchAll(
+    fn() => v::not(v::space('abc'))->assert('  '),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"  " must not contain space characters or "abc"')
+        ->and($fullMessage)->toBe('- "  " must not contain space characters or "abc"')
+        ->and($messages)->toBe(['notSpace' => '"  " must not contain space characters or "abc"']),
 ));

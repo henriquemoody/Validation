@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard domain template validation', catchAll(
     fn() => v::domain()->assert('batman'),
-    fn(string $message) => expect($message)->toBe('"batman" must be a valid domain'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"batman" must be a valid domain')
+        ->and($fullMessage)->toBe('- "batman" must be a valid domain')
+        ->and($messages)->toBe(['domain' => '"batman" must be a valid domain']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard domain template validation (inverted)', catchAll(
     fn() => v::not(v::domain())->assert('r--w.com'),
-    fn(string $message) => expect($message)->toBe('"r--w.com" must not be a valid domain'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::domain()->assert('p-éz-.kk'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "p-éz-.kk" must be a valid domain'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::domain())->assert('github.com'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "github.com" must not be a valid domain'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"r--w.com" must not be a valid domain')
+        ->and($fullMessage)->toBe('- "r--w.com" must not be a valid domain')
+        ->and($messages)->toBe(['notDomain' => '"r--w.com" must not be a valid domain']),
 ));

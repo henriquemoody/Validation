@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard directory template validation', catchAll(
     fn() => v::directory()->assert('batman'),
-    fn(string $message) => expect($message)->toBe('"batman" must be a directory'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"batman" must be a directory')
+        ->and($fullMessage)->toBe('- "batman" must be a directory')
+        ->and($messages)->toBe(['directory' => '"batman" must be a directory']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard directory template validation (inverted)', catchAll(
     fn() => v::not(v::directory())->assert(dirname('/etc/')),
-    fn(string $message) => expect($message)->toBe('"/" must not be a directory'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::directory()->assert('ppz'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "ppz" must be a directory'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::directory())->assert(dirname('/etc/')),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "/" must not be a directory'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"/" must not be a directory')
+        ->and($fullMessage)->toBe('- "/" must not be a directory')
+        ->and($messages)->toBe(['notDirectory' => '"/" must not be a directory']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard roman template validation', catchAll(
     fn() => v::roman()->assert(1234),
-    fn(string $message) => expect($message)->toBe('1234 must be a valid Roman numeral'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('1234 must be a valid Roman numeral')
+        ->and($fullMessage)->toBe('- 1234 must be a valid Roman numeral')
+        ->and($messages)->toBe(['roman' => '1234 must be a valid Roman numeral']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard roman template validation (inverted)', catchAll(
     fn() => v::not(v::roman())->assert('XL'),
-    fn(string $message) => expect($message)->toBe('"XL" must not be a valid Roman numeral'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::roman()->assert('e2'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "e2" must be a valid Roman numeral'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::roman())->assert('IV'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "IV" must not be a valid Roman numeral'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"XL" must not be a valid Roman numeral')
+        ->and($fullMessage)->toBe('- "XL" must not be a valid Roman numeral')
+        ->and($messages)->toBe(['notRoman' => '"XL" must not be a valid Roman numeral']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard arrayType template validation', catchAll(
     fn() => v::arrayType()->assert('teste'),
-    fn(string $message) => expect($message)->toBe('"teste" must be an array'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"teste" must be an array')
+        ->and($fullMessage)->toBe('- "teste" must be an array')
+        ->and($messages)->toBe(['arrayType' => '"teste" must be an array']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard arrayType template validation (inverted)', catchAll(
     fn() => v::not(v::arrayType())->assert([]),
-    fn(string $message) => expect($message)->toBe('`[]` must not be an array'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::arrayType()->assert(new ArrayObject()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `ArrayObject { getArrayCopy() => [] }` must be an array'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::arrayType())->assert([1, 2, 3]),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `[1, 2, 3]` must not be an array'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[]` must not be an array')
+        ->and($fullMessage)->toBe('- `[]` must not be an array')
+        ->and($messages)->toBe(['notArrayType' => '`[]` must not be an array']),
 ));
