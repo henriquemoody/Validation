@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::currencyCode()->assert('batman'),
-    fn(string $message) => expect($message)->toBe('"batman" must be a valid currency code'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::currencyCode())->assert('BRL'),
-    fn(string $message) => expect($message)->toBe('"BRL" must not be a valid currency code'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard currencyCode template validation', catchAll(
     fn() => v::currencyCode()->assert('ppz'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "ppz" must be a valid currency code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"ppz" must be a valid currency code')
+        ->and($fullMessage)->toBe('- "ppz" must be a valid currency code')
+        ->and($messages)->toBe(['currencyCode' => '"ppz" must be a valid currency code']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard currencyCode template validation (inverted)', catchAll(
     fn() => v::not(v::currencyCode())->assert('GBP'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "GBP" must not be a valid currency code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"GBP" must not be a valid currency code')
+        ->and($fullMessage)->toBe('- "GBP" must not be a valid currency code')
+        ->and($messages)->toBe(['notCurrencyCode' => '"GBP" must not be a valid currency code']),
 ));

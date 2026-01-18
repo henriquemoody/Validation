@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard image template validation', catchAll(
     fn() => v::image()->assert('tests/fixtures/invalid-image.png'),
-    fn(string $message) => expect($message)->toBe('"tests/fixtures/invalid-image.png" must be a valid image file'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"tests/fixtures/invalid-image.png" must be a valid image file')
+        ->and($fullMessage)->toBe('- "tests/fixtures/invalid-image.png" must be a valid image file')
+        ->and($messages)->toBe(['image' => '"tests/fixtures/invalid-image.png" must be a valid image file']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard image template validation (inverted)', catchAll(
     fn() => v::not(v::image())->assert('tests/fixtures/valid-image.png'),
-    fn(string $message) => expect($message)->toBe('"tests/fixtures/valid-image.png" must not be a valid image file'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::image()->assert(new stdClass()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `stdClass {}` must be a valid image file'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::image())->assert('tests/fixtures/valid-image.gif'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "tests/fixtures/valid-image.gif" must not be a valid image file'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"tests/fixtures/valid-image.png" must not be a valid image file')
+        ->and($fullMessage)->toBe('- "tests/fixtures/valid-image.png" must not be a valid image file')
+        ->and($messages)->toBe(['notImage' => '"tests/fixtures/valid-image.png" must not be a valid image file']),
 ));

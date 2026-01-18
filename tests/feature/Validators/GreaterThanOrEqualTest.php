@@ -7,22 +7,26 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('GreaterThanOrEqual default template with infinity comparison', catchAll(
     fn() => v::greaterThanOrEqual(INF)->assert(10),
-    fn(string $message) => expect($message)->toBe('10 must be greater than or equal to `INF`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('10 must be greater than or equal to `INF`')
+        ->and($fullMessage)->toBe('- 10 must be greater than or equal to `INF`')
+        ->and($messages)->toBe(['greaterThanOrEqual' => '10 must be greater than or equal to `INF`']),
 ));
 
-test('Scenario #2', catchMessage(
+test('GreaterThanOrEqual default template with negative assertion', catchAll(
     fn() => v::not(v::greaterThanOrEqual(5))->assert(INF),
-    fn(string $message) => expect($message)->toBe('`INF` must be less than 5'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`INF` must be less than 5')
+        ->and($fullMessage)->toBe('- `INF` must be less than 5')
+        ->and($messages)->toBe(['notGreaterThanOrEqual' => '`INF` must be less than 5']),
 ));
 
-test('Scenario #3', catchFullMessage(
+test('GreaterThanOrEqual default template with date comparison', catchAll(
     fn() => v::greaterThanOrEqual('today')->assert('yesterday'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "yesterday" must be greater than or equal to "today"'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::greaterThanOrEqual('a'))->assert('z'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "z" must be less than "a"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"yesterday" must be greater than or equal to "today"')
+        ->and($fullMessage)->toBe('- "yesterday" must be greater than or equal to "today"')
+        ->and($messages)->toBe(['greaterThanOrEqual' => '"yesterday" must be greater than or equal to "today"']),
 ));

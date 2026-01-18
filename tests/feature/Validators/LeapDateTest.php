@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard leapDate template validation', catchAll(
     fn() => v::leapDate('Y-m-d')->assert('1989-02-29'),
-    fn(string $message) => expect($message)->toBe('"1989-02-29" must be a valid leap date'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"1989-02-29" must be a valid leap date')
+        ->and($fullMessage)->toBe('- "1989-02-29" must be a valid leap date')
+        ->and($messages)->toBe(['leapDate' => '"1989-02-29" must be a valid leap date']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard leapDate template validation (inverted)', catchAll(
     fn() => v::not(v::leapDate('Y-m-d'))->assert('1988-02-29'),
-    fn(string $message) => expect($message)->toBe('"1988-02-29" must not be a leap date'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::leapDate('Y-m-d')->assert('1990-02-29'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "1990-02-29" must be a valid leap date'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::leapDate('Y-m-d'))->assert('1992-02-29'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "1992-02-29" must not be a leap date'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"1988-02-29" must not be a leap date')
+        ->and($fullMessage)->toBe('- "1988-02-29" must not be a leap date')
+        ->and($messages)->toBe(['notLeapDate' => '"1988-02-29" must not be a leap date']),
 ));

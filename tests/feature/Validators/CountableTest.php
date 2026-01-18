@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::countable()->assert(1.0),
-    fn(string $message) => expect($message)->toBe('1.0 must be a countable value'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::countable())->assert([]),
-    fn(string $message) => expect($message)->toBe('`[]` must not be a countable value'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard countable template validation', catchAll(
     fn() => v::countable()->assert('Not countable!'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "Not countable!" must be a countable value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"Not countable!" must be a countable value')
+        ->and($fullMessage)->toBe('- "Not countable!" must be a countable value')
+        ->and($messages)->toBe(['countable' => '"Not countable!" must be a countable value']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard countable template validation (inverted)', catchAll(
     fn() => v::not(v::countable())->assert(new ArrayObject()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `ArrayObject { getArrayCopy() => [] }` must not be a countable value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`ArrayObject { getArrayCopy() => [] }` must not be a countable value')
+        ->and($fullMessage)->toBe('- `ArrayObject { getArrayCopy() => [] }` must not be a countable value')
+        ->and($messages)->toBe(['notCountable' => '`ArrayObject { getArrayCopy() => [] }` must not be a countable value']),
 ));

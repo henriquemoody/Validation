@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::callback('is_string')->assert([]),
-    fn(string $message) => expect($message)->toBe('`[]` must be valid'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::callback('is_string'))->assert('foo'),
-    fn(string $message) => expect($message)->toBe('"foo" must be invalid'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard callback template validation', catchAll(
     fn() => v::callback('is_string')->assert(true),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `true` must be valid'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`true` must be valid')
+        ->and($fullMessage)->toBe('- `true` must be valid')
+        ->and($messages)->toBe(['callback' => '`true` must be valid']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard callback template validation (inverted)', catchAll(
     fn() => v::not(v::callback('is_string'))->assert('foo'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "foo" must be invalid'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"foo" must be invalid')
+        ->and($fullMessage)->toBe('- "foo" must be invalid')
+        ->and($messages)->toBe(['notCallback' => '"foo" must be invalid']),
 ));

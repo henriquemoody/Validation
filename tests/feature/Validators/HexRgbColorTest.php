@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard hexRgbColor template validation', catchAll(
     fn() => v::hexRgbColor()->assert('invalid'),
-    fn(string $message) => expect($message)->toBe('"invalid" must be a hex RGB color'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"invalid" must be a hex RGB color')
+        ->and($fullMessage)->toBe('- "invalid" must be a hex RGB color')
+        ->and($messages)->toBe(['hexRgbColor' => '"invalid" must be a hex RGB color']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard hexRgbColor template validation (inverted)', catchAll(
     fn() => v::not(v::hexRgbColor())->assert('#808080'),
-    fn(string $message) => expect($message)->toBe('"#808080" must not be a hex RGB color'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::hexRgbColor()->assert('invalid'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "invalid" must be a hex RGB color'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::hexRgbColor())->assert('#808080'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "#808080" must not be a hex RGB color'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"#808080" must not be a hex RGB color')
+        ->and($fullMessage)->toBe('- "#808080" must not be a hex RGB color')
+        ->and($messages)->toBe(['notHexRgbColor' => '"#808080" must not be a hex RGB color']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard endsWith template validation', catchAll(
     fn() => v::endsWith('foo')->assert('bar'),
-    fn(string $message) => expect($message)->toBe('"bar" must end with "foo"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"bar" must end with "foo"')
+        ->and($fullMessage)->toBe('- "bar" must end with "foo"')
+        ->and($messages)->toBe(['endsWith' => '"bar" must end with "foo"']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard endsWith template validation (inverted)', catchAll(
     fn() => v::not(v::endsWith('foo'))->assert(['bar', 'foo']),
-    fn(string $message) => expect($message)->toBe('`["bar", "foo"]` must not end with "foo"'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::endsWith('foo')->assert(''),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "" must end with "foo"'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::endsWith('foo'))->assert(['bar', 'foo']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["bar", "foo"]` must not end with "foo"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`["bar", "foo"]` must not end with "foo"')
+        ->and($fullMessage)->toBe('- `["bar", "foo"]` must not end with "foo"')
+        ->and($messages)->toBe(['notEndsWith' => '`["bar", "foo"]` must not end with "foo"']),
 ));

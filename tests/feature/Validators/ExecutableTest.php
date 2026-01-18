@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard executable template validation', catchAll(
     fn() => v::executable()->assert('bar'),
-    fn(string $message) => expect($message)->toBe('"bar" must be an executable file'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"bar" must be an executable file')
+        ->and($fullMessage)->toBe('- "bar" must be an executable file')
+        ->and($messages)->toBe(['executable' => '"bar" must be an executable file']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard executable template validation (inverted)', catchAll(
     fn() => v::not(v::executable())->assert('tests/fixtures/executable'),
-    fn(string $message) => expect($message)->toBe('"tests/fixtures/executable" must not be an executable file'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::executable()->assert('bar'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "bar" must be an executable file'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::executable())->assert('tests/fixtures/executable'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "tests/fixtures/executable" must not be an executable file'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"tests/fixtures/executable" must not be an executable file')
+        ->and($fullMessage)->toBe('- "tests/fixtures/executable" must not be an executable file')
+        ->and($messages)->toBe(['notExecutable' => '"tests/fixtures/executable" must not be an executable file']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard infinite template validation', catchAll(
     fn() => v::infinite()->assert(-9),
-    fn(string $message) => expect($message)->toBe('-9 must be an infinite number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('-9 must be an infinite number')
+        ->and($fullMessage)->toBe('- -9 must be an infinite number')
+        ->and($messages)->toBe(['infinite' => '-9 must be an infinite number']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard infinite template validation (inverted)', catchAll(
     fn() => v::not(v::infinite())->assert(INF),
-    fn(string $message) => expect($message)->toBe('`INF` must not be an infinite number'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::infinite()->assert(new stdClass()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `stdClass {}` must be an infinite number'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::infinite())->assert(INF * -1),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `-INF` must not be an infinite number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`INF` must not be an infinite number')
+        ->and($fullMessage)->toBe('- `INF` must not be an infinite number')
+        ->and($messages)->toBe(['notInfinite' => '`INF` must not be an infinite number']),
 ));

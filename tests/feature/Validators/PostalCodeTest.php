@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard postalCode template validation', catchAll(
     fn() => v::postalCode('BR')->assert('1057BV'),
-    fn(string $message) => expect($message)->toBe('"1057BV" must be a valid postal code on "BR"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"1057BV" must be a valid postal code on "BR"')
+        ->and($fullMessage)->toBe('- "1057BV" must be a valid postal code on "BR"')
+        ->and($messages)->toBe(['postalCode' => '"1057BV" must be a valid postal code on "BR"']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard postalCode template validation (inverted)', catchAll(
     fn() => v::not(v::postalCode('NL'))->assert('1057BV'),
-    fn(string $message) => expect($message)->toBe('"1057BV" must not be a valid postal code on "NL"'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::postalCode('BR')->assert('1057BV'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "1057BV" must be a valid postal code on "BR"'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::postalCode('NL'))->assert('1057BV'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "1057BV" must not be a valid postal code on "NL"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"1057BV" must not be a valid postal code on "NL"')
+        ->and($fullMessage)->toBe('- "1057BV" must not be a valid postal code on "NL"')
+        ->and($messages)->toBe(['notPostalCode' => '"1057BV" must not be a valid postal code on "NL"']),
 ));

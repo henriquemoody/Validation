@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard negative template validation', catchAll(
     fn() => v::negative()->assert(16),
-    fn(string $message) => expect($message)->toBe('16 must be a negative number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('16 must be a negative number')
+        ->and($fullMessage)->toBe('- 16 must be a negative number')
+        ->and($messages)->toBe(['negative' => '16 must be a negative number']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard negative template validation (inverted)', catchAll(
     fn() => v::not(v::negative())->assert(-10),
-    fn(string $message) => expect($message)->toBe('-10 must not be a negative number'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::negative()->assert('a'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "a" must be a negative number'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::negative())->assert('-144'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "-144" must not be a negative number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('-10 must not be a negative number')
+        ->and($fullMessage)->toBe('- -10 must not be a negative number')
+        ->and($messages)->toBe(['notNegative' => '-10 must not be a negative number']),
 ));

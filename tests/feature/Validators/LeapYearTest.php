@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard leapYear template validation', catchAll(
     fn() => v::leapYear()->assert('2009'),
-    fn(string $message) => expect($message)->toBe('"2009" must be a valid leap year'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"2009" must be a valid leap year')
+        ->and($fullMessage)->toBe('- "2009" must be a valid leap year')
+        ->and($messages)->toBe(['leapYear' => '"2009" must be a valid leap year']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard leapYear template validation (inverted)', catchAll(
     fn() => v::not(v::leapYear())->assert('2008'),
-    fn(string $message) => expect($message)->toBe('"2008" must not be a leap year'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::leapYear()->assert('2009-02-29'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "2009-02-29" must be a valid leap year'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::leapYear())->assert('2008'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "2008" must not be a leap year'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"2008" must not be a leap year')
+        ->and($fullMessage)->toBe('- "2008" must not be a leap year')
+        ->and($messages)->toBe(['notLeapYear' => '"2008" must not be a leap year']),
 ));

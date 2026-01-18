@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('CountryCode default template with positive assertion', catchAll(
     fn() => v::countryCode()->assert('1'),
-    fn(string $message) => expect($message)->toBe('"1" must be a valid country code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"1" must be a valid country code')
+        ->and($fullMessage)->toBe('- "1" must be a valid country code')
+        ->and($messages)->toBe(['countryCode' => '"1" must be a valid country code']),
 ));
 
-test('Scenario #2', catchMessage(
+test('CountryCode default template with negative assertion', catchAll(
     fn() => v::not(v::countryCode())->assert('BR'),
-    fn(string $message) => expect($message)->toBe('"BR" must not be a valid country code'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::countryCode()->assert('1'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "1" must be a valid country code'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::countryCode())->assert('BR'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "BR" must not be a valid country code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"BR" must not be a valid country code')
+        ->and($fullMessage)->toBe('- "BR" must not be a valid country code')
+        ->and($messages)->toBe(['notCountryCode' => '"BR" must not be a valid country code']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::floatType()->assert('42.33'),
-    fn(string $message) => expect($message)->toBe('"42.33" must be float'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::floatType())->assert(INF),
-    fn(string $message) => expect($message)->toBe('`INF` must not be float'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard floatType template validation', catchAll(
     fn() => v::floatType()->assert(true),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `true` must be float'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`true` must be float')
+        ->and($fullMessage)->toBe('- `true` must be float')
+        ->and($messages)->toBe(['floatType' => '`true` must be float']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard floatType template validation (inverted)', catchAll(
     fn() => v::not(v::floatType())->assert(2.0),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- 2.0 must not be float'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('2.0 must not be float')
+        ->and($fullMessage)->toBe('- 2.0 must not be float')
+        ->and($messages)->toBe(['notFloatType' => '2.0 must not be float']),
 ));

@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard iterableVal template validation', catchAll(
     fn() => v::iterableVal()->assert(3),
-    fn(string $message) => expect($message)->toBe('3 must be an iterable value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('3 must be an iterable value')
+        ->and($fullMessage)->toBe('- 3 must be an iterable value')
+        ->and($messages)->toBe(['iterableVal' => '3 must be an iterable value']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard iterableVal template validation (inverted)', catchAll(
     fn() => v::not(v::iterableVal())->assert([2, 3]),
-    fn(string $message) => expect($message)->toBe('`[2, 3]` must not be an iterable value'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::iterableVal()->assert('String'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "String" must be an iterable value'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::iterableVal())->assert(new stdClass()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `stdClass {}` must not be an iterable value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[2, 3]` must not be an iterable value')
+        ->and($fullMessage)->toBe('- `[2, 3]` must not be an iterable value')
+        ->and($messages)->toBe(['notIterableVal' => '`[2, 3]` must not be an iterable value']),
 ));

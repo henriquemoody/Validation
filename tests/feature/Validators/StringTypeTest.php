@@ -7,22 +7,26 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('StringType default template with numeric input', catchAll(
     fn() => v::stringType()->assert(42),
-    fn(string $message) => expect($message)->toBe('42 must be a string'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('42 must be a string')
+        ->and($fullMessage)->toBe('- 42 must be a string')
+        ->and($messages)->toBe(['stringType' => '42 must be a string']),
 ));
 
-test('Scenario #2', catchMessage(
+test('StringType default template with negative assertion', catchAll(
     fn() => v::not(v::stringType())->assert('foo'),
-    fn(string $message) => expect($message)->toBe('"foo" must not be a string'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"foo" must not be a string')
+        ->and($fullMessage)->toBe('- "foo" must not be a string')
+        ->and($messages)->toBe(['notStringType' => '"foo" must not be a string']),
 ));
 
-test('Scenario #3', catchFullMessage(
+test('StringType default template with boolean input', catchAll(
     fn() => v::stringType()->assert(true),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `true` must be a string'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::stringType())->assert('bar'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "bar" must not be a string'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`true` must be a string')
+        ->and($fullMessage)->toBe('- `true` must be a string')
+        ->and($messages)->toBe(['stringType' => '`true` must be a string']),
 ));

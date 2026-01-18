@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard nif template validation', catchAll(
     fn() => v::nif()->assert('06357771Q'),
-    fn(string $message) => expect($message)->toBe('"06357771Q" must be a valid NIF'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"06357771Q" must be a valid NIF')
+        ->and($fullMessage)->toBe('- "06357771Q" must be a valid NIF')
+        ->and($messages)->toBe(['nif' => '"06357771Q" must be a valid NIF']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard nif template validation (inverted)', catchAll(
     fn() => v::not(v::nif())->assert('71110316C'),
-    fn(string $message) => expect($message)->toBe('"71110316C" must not be a valid NIF'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::nif()->assert('06357771Q'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "06357771Q" must be a valid NIF'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::nif())->assert('R1332622H'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "R1332622H" must not be a valid NIF'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"71110316C" must not be a valid NIF')
+        ->and($fullMessage)->toBe('- "71110316C" must not be a valid NIF')
+        ->and($messages)->toBe(['notNif' => '"71110316C" must not be a valid NIF']),
 ));

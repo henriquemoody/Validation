@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard perfectSquare template validation', catchAll(
     fn() => v::perfectSquare()->assert(250),
-    fn(string $message) => expect($message)->toBe('250 must be a perfect square number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('250 must be a perfect square number')
+        ->and($fullMessage)->toBe('- 250 must be a perfect square number')
+        ->and($messages)->toBe(['perfectSquare' => '250 must be a perfect square number']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard perfectSquare template validation (inverted)', catchAll(
     fn() => v::not(v::perfectSquare())->assert(9),
-    fn(string $message) => expect($message)->toBe('9 must not be a perfect square number'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::perfectSquare()->assert(7),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- 7 must be a perfect square number'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::perfectSquare())->assert(400),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- 400 must not be a perfect square number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('9 must not be a perfect square number')
+        ->and($fullMessage)->toBe('- 9 must not be a perfect square number')
+        ->and($messages)->toBe(['notPerfectSquare' => '9 must not be a perfect square number']),
 ));

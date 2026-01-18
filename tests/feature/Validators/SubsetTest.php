@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard subset template validation', catchAll(
     fn() => v::subset([1, 2])->assert([1, 2, 3]),
-    fn(string $message) => expect($message)->toBe('`[1, 2, 3]` must be subset of `[1, 2]`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[1, 2, 3]` must be subset of `[1, 2]`')
+        ->and($fullMessage)->toBe('- `[1, 2, 3]` must be subset of `[1, 2]`')
+        ->and($messages)->toBe(['subset' => '`[1, 2, 3]` must be subset of `[1, 2]`']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard subset template validation (inverted)', catchAll(
     fn() => v::not(v::subset([1, 2, 3]))->assert([1, 2]),
-    fn(string $message) => expect($message)->toBe('`[1, 2]` must not be subset of `[1, 2, 3]`'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::subset(['A', 'B'])->assert(['B', 'C']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["B", "C"]` must be subset of `["A", "B"]`'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::subset(['A']))->assert(['A']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["A"]` must not be subset of `["A"]`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[1, 2]` must not be subset of `[1, 2, 3]`')
+        ->and($fullMessage)->toBe('- `[1, 2]` must not be subset of `[1, 2, 3]`')
+        ->and($messages)->toBe(['notSubset' => '`[1, 2]` must not be subset of `[1, 2, 3]`']),
 ));

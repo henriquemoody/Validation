@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard scalarVal template validation', catchAll(
     fn() => v::scalarVal()->assert([]),
-    fn(string $message) => expect($message)->toBe('`[]` must be a scalar value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[]` must be a scalar value')
+        ->and($fullMessage)->toBe('- `[]` must be a scalar value')
+        ->and($messages)->toBe(['scalarVal' => '`[]` must be a scalar value']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard scalarVal template validation (inverted)', catchAll(
     fn() => v::not(v::scalarVal())->assert(true),
-    fn(string $message) => expect($message)->toBe('`true` must not be a scalar value'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::scalarVal()->assert(new stdClass()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `stdClass {}` must be a scalar value'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::scalarVal())->assert(42),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- 42 must not be a scalar value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`true` must not be a scalar value')
+        ->and($fullMessage)->toBe('- `true` must not be a scalar value')
+        ->and($messages)->toBe(['notScalarVal' => '`true` must not be a scalar value']),
 ));

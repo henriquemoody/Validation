@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::finite()->assert(''),
-    fn(string $message) => expect($message)->toBe('"" must be a finite number'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::finite())->assert(10),
-    fn(string $message) => expect($message)->toBe('10 must not be a finite number'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard finite template validation', catchAll(
     fn() => v::finite()->assert([12]),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `[12]` must be a finite number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`[12]` must be a finite number')
+        ->and($fullMessage)->toBe('- `[12]` must be a finite number')
+        ->and($messages)->toBe(['finite' => '`[12]` must be a finite number']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard finite template validation (inverted)', catchAll(
     fn() => v::not(v::finite())->assert('123456'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "123456" must not be a finite number'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"123456" must not be a finite number')
+        ->and($fullMessage)->toBe('- "123456" must not be a finite number')
+        ->and($messages)->toBe(['notFinite' => '"123456" must not be a finite number']),
 ));

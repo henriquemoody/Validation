@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard regex template validation', catchAll(
     fn() => v::regex('/^w+$/')->assert('w poiur'),
-    fn(string $message) => expect($message)->toBe('"w poiur" must match the pattern `/^w+$/`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"w poiur" must match the pattern `/^w+$/`')
+        ->and($fullMessage)->toBe('- "w poiur" must match the pattern `/^w+$/`')
+        ->and($messages)->toBe(['regex' => '"w poiur" must match the pattern `/^w+$/`']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard regex template validation (inverted)', catchAll(
     fn() => v::not(v::regex('/^[a-z]+$/'))->assert('wpoiur'),
-    fn(string $message) => expect($message)->toBe('"wpoiur" must not match the pattern `/^[a-z]+$/`'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::regex('/^w+$/')->assert(new stdClass()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `stdClass {}` must match the pattern `/^w+$/`'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::regex('/^[a-z]+$/i'))->assert('wPoiur'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "wPoiur" must not match the pattern `/^[a-z]+$/i`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"wpoiur" must not match the pattern `/^[a-z]+$/`')
+        ->and($fullMessage)->toBe('- "wpoiur" must not match the pattern `/^[a-z]+$/`')
+        ->and($messages)->toBe(['notRegex' => '"wpoiur" must not match the pattern `/^[a-z]+$/`']),
 ));

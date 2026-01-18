@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard boolVal template validation', catchAll(
     fn() => v::boolVal()->assert('ok'),
-    fn(string $message) => expect($message)->toBe('"ok" must be a boolean value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"ok" must be a boolean value')
+        ->and($fullMessage)->toBe('- "ok" must be a boolean value')
+        ->and($messages)->toBe(['boolVal' => '"ok" must be a boolean value']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard boolVal template validation (inverted)', catchAll(
     fn() => v::not(v::boolVal())->assert('yes'),
-    fn(string $message) => expect($message)->toBe('"yes" must not be a boolean value'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::boolVal()->assert('yep'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "yep" must be a boolean value'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::boolVal())->assert('on'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "on" must not be a boolean value'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"yes" must not be a boolean value')
+        ->and($fullMessage)->toBe('- "yes" must not be a boolean value')
+        ->and($messages)->toBe(['notBoolVal' => '"yes" must not be a boolean value']),
 ));

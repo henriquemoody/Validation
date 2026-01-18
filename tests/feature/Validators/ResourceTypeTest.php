@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard resourceType template validation', catchAll(
     fn() => v::resourceType()->assert('test'),
-    fn(string $message) => expect($message)->toBe('"test" must be a resource'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"test" must be a resource')
+        ->and($fullMessage)->toBe('- "test" must be a resource')
+        ->and($messages)->toBe(['resourceType' => '"test" must be a resource']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard resourceType template validation (inverted)', catchAll(
     fn() => v::not(v::resourceType())->assert(tmpfile()),
-    fn(string $message) => expect($message)->toBe('`resource <stream>` must not be a resource'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::resourceType()->assert([]),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `[]` must be a resource'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::resourceType())->assert(tmpfile()),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `resource <stream>` must not be a resource'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`resource <stream>` must not be a resource')
+        ->and($fullMessage)->toBe('- `resource <stream>` must not be a resource')
+        ->and($messages)->toBe(['notResourceType' => '`resource <stream>` must not be a resource']),
 ));

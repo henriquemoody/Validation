@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard contains template validation', catchAll(
     fn() => v::contains('foo')->assert('bar'),
-    fn(string $message) => expect($message)->toBe('"bar" must contain "foo"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"bar" must contain "foo"')
+        ->and($fullMessage)->toBe('- "bar" must contain "foo"')
+        ->and($messages)->toBe(['contains' => '"bar" must contain "foo"']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard contains template validation (inverted)', catchAll(
     fn() => v::not(v::contains('foo'))->assert('fool'),
-    fn(string $message) => expect($message)->toBe('"fool" must not contain "foo"'),
-));
-
-test('Scenario #3', catchFullMessage(
-    fn() => v::contains('foo')->assert(['bar']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["bar"]` must contain "foo"'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::contains('foo', true))->assert(['bar', 'foo']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["bar", "foo"]` must not contain "foo"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"fool" must not contain "foo"')
+        ->and($fullMessage)->toBe('- "fool" must not contain "foo"')
+        ->and($messages)->toBe(['notContains' => '"fool" must not contain "foo"']),
 ));

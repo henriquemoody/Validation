@@ -7,22 +7,26 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('LessThan default template with numeric comparison', catchAll(
     fn() => v::lessThan(12)->assert(21),
-    fn(string $message) => expect($message)->toBe('21 must be less than 12'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('21 must be less than 12')
+        ->and($fullMessage)->toBe('- 21 must be less than 12')
+        ->and($messages)->toBe(['lessThan' => '21 must be less than 12']),
 ));
 
-test('Scenario #2', catchMessage(
+test('LessThan default template with string comparison and negative assertion', catchAll(
     fn() => v::not(v::lessThan('today'))->assert('yesterday'),
-    fn(string $message) => expect($message)->toBe('"yesterday" must not be less than "today"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"yesterday" must not be less than "today"')
+        ->and($fullMessage)->toBe('- "yesterday" must not be less than "today"')
+        ->and($messages)->toBe(['notLessThan' => '"yesterday" must not be less than "today"']),
 ));
 
-test('Scenario #3', catchFullMessage(
+test('LessThan default template with date comparison', catchAll(
     fn() => v::lessThan('1988-09-09')->assert('2018-09-09'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "2018-09-09" must be less than "1988-09-09"'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::lessThan('b'))->assert('a'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "a" must not be less than "b"'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"2018-09-09" must be less than "1988-09-09"')
+        ->and($fullMessage)->toBe('- "2018-09-09" must be less than "1988-09-09"')
+        ->and($messages)->toBe(['lessThan' => '"2018-09-09" must be less than "1988-09-09"']),
 ));

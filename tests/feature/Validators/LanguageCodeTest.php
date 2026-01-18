@@ -7,22 +7,18 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
-    fn() => v::languageCode()->assert(null),
-    fn(string $message) => expect($message)->toBe('`null` must be a valid language code'),
-));
-
-test('Scenario #2', catchMessage(
-    fn() => v::not(v::languageCode())->assert('pt'),
-    fn(string $message) => expect($message)->toBe('"pt" must not be a valid language code'),
-));
-
-test('Scenario #3', catchFullMessage(
+test('Standard languageCode template validation', catchAll(
     fn() => v::languageCode()->assert('por'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "por" must be a valid language code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"por" must be a valid language code')
+        ->and($fullMessage)->toBe('- "por" must be a valid language code')
+        ->and($messages)->toBe(['languageCode' => '"por" must be a valid language code']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Standard languageCode template validation (inverted)', catchAll(
     fn() => v::not(v::languageCode())->assert('en'),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- "en" must not be a valid language code'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"en" must not be a valid language code')
+        ->and($fullMessage)->toBe('- "en" must not be a valid language code')
+        ->and($messages)->toBe(['notLanguageCode' => '"en" must not be a valid language code']),
 ));

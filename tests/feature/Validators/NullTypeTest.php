@@ -7,22 +7,26 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('NullType default template with empty string', catchAll(
     fn() => v::nullType()->assert(''),
-    fn(string $message) => expect($message)->toBe('"" must be null'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"" must be null')
+        ->and($fullMessage)->toBe('- "" must be null')
+        ->and($messages)->toBe(['nullType' => '"" must be null']),
 ));
 
-test('Scenario #2', catchMessage(
+test('NullType default template with negative assertion', catchAll(
     fn() => v::not(v::nullType())->assert(null),
-    fn(string $message) => expect($message)->toBe('`null` must not be null'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`null` must not be null')
+        ->and($fullMessage)->toBe('- `null` must not be null')
+        ->and($messages)->toBe(['notNullType' => '`null` must not be null']),
 ));
 
-test('Scenario #3', catchFullMessage(
+test('NullType default template with boolean false', catchAll(
     fn() => v::nullType()->assert(false),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `false` must be null'),
-));
-
-test('Scenario #4', catchFullMessage(
-    fn() => v::not(v::nullType())->assert(null),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `null` must not be null'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`false` must be null')
+        ->and($fullMessage)->toBe('- `false` must be null')
+        ->and($messages)->toBe(['nullType' => '`false` must be null']),
 ));

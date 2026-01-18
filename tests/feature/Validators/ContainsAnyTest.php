@@ -7,22 +7,34 @@
 
 declare(strict_types=1);
 
-test('Scenario #1', catchMessage(
+test('Standard containsAny template validation', catchAll(
     fn() => v::containsAny(['foo', 'bar'])->assert('baz'),
-    fn(string $message) => expect($message)->toBe('"baz" must contain at least one value from `["foo", "bar"]`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"baz" must contain at least one value from `["foo", "bar"]`')
+        ->and($fullMessage)->toBe('- "baz" must contain at least one value from `["foo", "bar"]`')
+        ->and($messages)->toBe(['containsAny' => '"baz" must contain at least one value from `["foo", "bar"]`']),
 ));
 
-test('Scenario #2', catchMessage(
+test('Standard containsAny template validation (inverted)', catchAll(
     fn() => v::not(v::containsAny(['foo', 'bar']))->assert('fool'),
-    fn(string $message) => expect($message)->toBe('"fool" must not contain any value from `["foo", "bar"]`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('"fool" must not contain any value from `["foo", "bar"]`')
+        ->and($fullMessage)->toBe('- "fool" must not contain any value from `["foo", "bar"]`')
+        ->and($messages)->toBe(['notContainsAny' => '"fool" must not contain any value from `["foo", "bar"]`']),
 ));
 
-test('Scenario #3', catchFullMessage(
-    fn() => v::containsAny(['foo', 'bar'])->assert(['baz']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["baz"]` must contain at least one value from `["foo", "bar"]`'),
+test('Extra containsAny template validation with strict comparison', catchAll(
+    fn() => v::containsAny(['foo', 'bar'], true)->assert(['baz']),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`["baz"]` must contain at least one value from `["foo", "bar"]`')
+        ->and($fullMessage)->toBe('- `["baz"]` must contain at least one value from `["foo", "bar"]`')
+        ->and($messages)->toBe(['containsAny' => '`["baz"]` must contain at least one value from `["foo", "bar"]`']),
 ));
 
-test('Scenario #4', catchFullMessage(
+test('Extra containsAny template validation with strict comparison (inverted)', catchAll(
     fn() => v::not(v::containsAny(['foo', 'bar'], true))->assert(['bar', 'foo']),
-    fn(string $fullMessage) => expect($fullMessage)->toBe('- `["bar", "foo"]` must not contain any value from `["foo", "bar"]`'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`["bar", "foo"]` must not contain any value from `["foo", "bar"]`')
+        ->and($fullMessage)->toBe('- `["bar", "foo"]` must not contain any value from `["foo", "bar"]`')
+        ->and($messages)->toBe(['notContainsAny' => '`["bar", "foo"]` must not contain any value from `["foo", "bar"]`']),
 ));
