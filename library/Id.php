@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Respect\Validation;
 
+use function count;
 use function lcfirst;
 use function strrchr;
 use function substr;
@@ -23,6 +24,10 @@ final readonly class Id
 
     public static function fromValidator(Validator $validator): self
     {
+        if ($validator instanceof ValidatorBuilder && count($validator->getValidators()) === 1) {
+            return self::fromValidator($validator->getValidators()[0]);
+        }
+
         return new self(lcfirst(substr((string) strrchr($validator::class, '\\'), 1)));
     }
 
