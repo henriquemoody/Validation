@@ -16,11 +16,12 @@ use Respect\Validation\Message\Renderer;
 use Respect\Validation\Message\StringFormatter;
 use Stringable;
 
-use function array_find;
 use function array_map;
 use function array_reverse;
+use function count;
 use function ctype_digit;
 use function explode;
+use function is_int;
 use function is_string;
 
 final readonly class ResultQuery implements Stringable
@@ -74,7 +75,8 @@ final readonly class ResultQuery implements Stringable
 
     public function findByPath(string|int $path): self|null
     {
-        $result = $this->findBySearchPaths($this->result, $this->getSearchPathsFromScalar($path));
+        $paths = is_int($path) ? [$path] : $this->getSearchPathsFromScalar($path);
+        $result = $this->findBySearchPaths($this->result, $paths);
 
         return match ($result) {
             null => null,
@@ -119,14 +121,44 @@ final readonly class ResultQuery implements Stringable
     /** @param array<string|int> $searchPaths */
     private function findBySearchPaths(Result $result, array $searchPaths): Result|null
     {
-        if ($this->getSearchPathsFromPath($result->path) === $searchPaths) {
+        if ($this->pathMatchesSearchPaths($this->getSearchPathsFromPath($result->path), $searchPaths)) {
             return $result;
         }
 
-        return array_find(
-            $result->children,
-            fn($child) => $this->getSearchPathsFromPath($child->path) === $searchPaths,
-        );
+        foreach ($result->children as $child) {
+            $found = $this->findBySearchPaths($child, $searchPaths);
+            if ($found !== null) {
+                return $found;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string|int> $paths
+     * @param array<string|int> $searchPaths
+     */
+    private function pathMatchesSearchPaths(array $paths, array $searchPaths): bool
+    {
+        $pathLength = count($paths);
+        $searchPathsLength = count($searchPaths);
+
+        if ($pathLength !== $searchPathsLength) {
+            return false;
+        }
+
+        foreach ($searchPaths as $i => $patternPart) {
+            if ($patternPart === '*') {
+                continue;
+            }
+
+            if ($paths[$i] !== $patternPart) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /** @return array<string|int> */

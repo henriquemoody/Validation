@@ -174,6 +174,24 @@ if ($emailResult?->hasFailed()) {
 }
 ```
 
+Paths support wildcards using `*` to match any single path segment:
+- `items.*` matches the first result under `items`
+- `*.email` matches the first `.email` path found
+- `data.*.value` matches the first nested path ending with `.value`
+
+```php
+$result = v::init()
+    ->key('items', v::each(v::positive()))
+    ->validate(['items' => [10, -5, 20]]);
+
+// Find the first invalid item (items.1)
+$firstInvalid = $result->findByPath('items.*');
+if ($firstInvalid?->hasFailed()) {
+    echo $firstInvalid->getMessage();
+    // → `.items.1` must be a positive number
+}
+```
+
 ### findByName()
 
 Finds a result by a custom name assigned with the `Named` validator.

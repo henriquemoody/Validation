@@ -75,3 +75,62 @@ test('findById returns null when id not found', function (): void {
 
     expect($result->findById('nonexistent'))->toBeNull();
 });
+
+test('findByPath with wildcard matches first item', function (): void {
+    $validator = v::key('items', v::each(v::stringType()));
+
+    $result = $validator->validate([
+        'items' => ['valid', 123, 'also-valid'],
+    ]);
+
+    $firstMatch = $result->findByPath('items.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.items.1` must be a string');
+});
+
+test('findByPath with wildcard at start matches prefix', function (): void {
+    $validator = v::key('user', v::key('email', v::email()))
+        ->key('admin', v::key('email', v::email()));
+
+    $result = $validator->validate([
+        'user' => ['email' => 'invalid'],
+        'admin' => ['email' => 'bad'],
+    ]);
+
+    $firstMatch = $result->findByPath('*.email');
+
+    expect($firstMatch?->getMessage())->toBe('`.user.email` must be an email address');
+});
+
+test('findByPath with wildcard in middle of path', function (): void {
+    $validator = v::key('data', v::key('items', v::each(v::positive())));
+
+    $result = $validator->validate([
+        'data' => ['items' => [10, -5, 20]],
+    ]);
+
+    $firstMatch = $result->findByPath('data.items.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.data.items.1` must be a positive number');
+});
+
+test('findByPath with nested wildcards', function (): void {
+    $validator = v::key('groups', v::each(v::key('items', v::each(v::stringType()))));
+
+    $result = $validator->validate([
+        'groups' => [
+            ['items' => ['valid', 123]],
+            ['items' => ['ok', 456]],
+        ],
+    ]);
+
+    $firstMatch = $result->findByPath('groups.*.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.groups.items.1` must be a string');
+});
+
+test('findByPath with wildcard returns null when no matches', function (): void {
+    $result = v::key('user', v::email())->validate(['user' => 'bad']);
+
+    expect($result->findByPath('nonexistent.*'))->toBeNull();
+});

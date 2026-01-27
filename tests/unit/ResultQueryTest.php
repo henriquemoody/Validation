@@ -589,6 +589,93 @@ final class ResultQueryTest extends TestCase
         self::assertSame($formatter->format($child, $renderer, []), (string) $found);
     }
 
+    #[Test]
+    public function itShouldFindByPathWithWildcard(): void
+    {
+        $renderer = new TestingMessageRenderer();
+        $formatter = new TestingStringFormatter(uniqid());
+
+        $childPath = uniqid();
+        $parentPath = uniqid();
+
+        $child = (new ResultBuilder())
+            ->path(new Path($childPath, new Path($parentPath)))
+            ->hasPassed(false)
+            ->build();
+
+        $parent = (new ResultBuilder())
+            ->hasPassed(false)
+            ->children($child)
+            ->build();
+
+        $resultQuery = $this->createResultQuery($parent, renderer: $renderer, messageFormatter: $formatter);
+
+        $found = $resultQuery->findByPath('*.' . $childPath);
+
+        self::assertNotNull($found);
+        self::assertSame($formatter->format($child, $renderer, []), (string) $found);
+    }
+
+    #[Test]
+    public function itShouldFindByPathWithWildcardAtEnd(): void
+    {
+        $renderer = new TestingMessageRenderer();
+        $formatter = new TestingStringFormatter(uniqid());
+
+        $parentPath = uniqid();
+        $child = (new ResultBuilder())
+            ->path(new Path(uniqid(), new Path($parentPath)))
+            ->hasPassed(false)
+            ->build();
+
+        $parent = (new ResultBuilder())
+            ->hasPassed(false)
+            ->children($child)
+            ->build();
+
+        $resultQuery = $this->createResultQuery($parent, renderer: $renderer, messageFormatter: $formatter);
+
+        $found = $resultQuery->findByPath($parentPath . '.*');
+
+        self::assertNotNull($found);
+        self::assertSame($formatter->format($child, $renderer, []), (string) $found);
+    }
+
+    #[Test]
+    public function itShouldReturnNullWhenPathWithWildcardDoesNotMatch(): void
+    {
+        $child = (new ResultBuilder())
+            ->path(new Path(uniqid()))
+            ->build();
+
+        $parent = (new ResultBuilder())
+            ->hasPassed(false)
+            ->children($child)
+            ->build();
+
+        $resultQuery = $this->createResultQuery($parent);
+
+        self::assertNull($resultQuery->findByPath(uniqid() . '.*'));
+    }
+
+    #[Test]
+    public function itShouldReturnNullWhenPathLengthDoesNotMatch(): void
+    {
+        $child = (new ResultBuilder())
+            ->path(new Path(uniqid()))
+            ->hasPassed(false)
+            ->build();
+
+        $parent = (new ResultBuilder())
+            ->hasPassed(false)
+            ->children($child)
+            ->build();
+
+        $resultQuery = $this->createResultQuery($parent);
+
+        self::assertNull($resultQuery->findByPath('*.*'));
+    }
+
     private function createResultQuery(
         Result $result,
         TestingMessageRenderer|null $renderer = null,
