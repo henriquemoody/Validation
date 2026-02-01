@@ -16,6 +16,7 @@ use Respect\Validation\Message\Renderer;
 use Respect\Validation\Result;
 
 use function array_reduce;
+use function array_values;
 use function count;
 use function current;
 use function is_array;
@@ -96,31 +97,82 @@ final readonly class NestedArrayFormatter implements ArrayFormatter
         Result $parent,
         bool $isParentVisible,
     ): array {
-        if ($hasString && is_numeric($key)) {
-            $key = $child->id->value;
+        $key = $this->normalizeKey($key, $hasString, $child);
+
+        $appended = $this->renderChild($child, $renderer, $templates, $parent, $isParentVisible);
+
+        if (is_array($appended) && count($appended) > 1 && !isset($appended['__root__'])) {
+            $appended = ['__root__' => $renderer->render($child, $templates)] + $appended;
         }
 
-        $message = $this->renderChild($child, $renderer, $templates, $parent, $isParentVisible);
-
         if (!$hasString) {
-            $messages[] = $message;
+            $messages[] = $appended;
 
             return $messages;
         }
 
-        if (isset($messages[$key])) {
-            if (!is_array($messages[$key])) {
+        if (!isset($messages[$key])) {
+            $messages[$key] = $appended;
+
+            return $messages;
+        }
+
+        if ($child->path !== null) {
+            return $this->handlePathCollision($messages, $key, $appended);
+        }
+
+        return $this->handleIdCollision($messages, $appended, $parent, $renderer, $templates);
+    }
+
+    private function normalizeKey(string|int $key, bool $hasString, Result $child): string|int
+    {
+        if ($hasString && is_numeric($key)) {
+            return $child->id->value;
+        }
+
+        return $key;
+    }
+
+    /**
+     * @param array<string|int, mixed> $messages
+     * @param array<int|string, mixed>|string $appended
+     *
+     * @return array<string|int, mixed>
+     */
+    private function handlePathCollision(array $messages, string|int $key, array|string $appended): array
+    {
+        if (is_array($messages[$key])) {
+            if (isset($messages[$key]['__root__'])) {
                 $messages[$key] = [$messages[$key]];
             }
 
-            $messages[$key][] = $message;
-
-            return $messages;
+            $messages[$key][] = $appended;
+        } else {
+            $messages[$key] = [$messages[$key], $appended];
         }
 
-        $messages[$key] = $message;
-
         return $messages;
+    }
+
+    /**
+     * @param array<string|int, mixed> $messages
+     * @param array<int|string, mixed>|string $appended
+     * @param array<string|int, mixed> $templates
+     *
+     * @return array<string|int, mixed>
+     */
+    private function handleIdCollision(
+        array $messages,
+        array|string $appended,
+        Result $parent,
+        Renderer $renderer,
+        array $templates,
+    ): array {
+        $parentMessage = $messages['__root__'] ?? $renderer->render($parent, $templates);
+        $list = array_values($messages);
+        $list[] = $appended;
+
+        return ['__root__' => $parentMessage] + $list;
     }
 
     /**

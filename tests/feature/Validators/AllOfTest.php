@@ -123,3 +123,40 @@ test('With multiple templates', catchAll(
             'uppercase' => 'Template for "uppercase"',
         ]),
 ));
+
+test('Deep name collision', catchAll(
+    fn() => v::allOf(
+        v::named('alpha', v::allOf(
+            v::contains('quick'),
+            v::contains('fox'),
+        )),
+        v::named('zeta', v::allOf(
+            v::contains('lorem'),
+            v::contains('ipsum'),
+        )),
+    )->assert('foo bar baz'),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('alpha must contain "quick"')
+        ->and($fullMessage)->toBe(<<<'FULL_MESSAGE'
+            - "foo bar baz" must pass all the rules
+              - alpha must pass all the rules
+                - "foo bar baz" must contain "quick"
+                - "foo bar baz" must contain "fox"
+              - zeta must pass all the rules
+                - "foo bar baz" must contain "lorem"
+                - "foo bar baz" must contain "ipsum"
+            FULL_MESSAGE)
+        ->and($messages)->toBe([
+            '__root__' => '"foo bar baz" must pass all the rules',
+            0 => [
+                '__root__' => 'alpha must pass all the rules',
+                0 => '"foo bar baz" must contain "quick"',
+                1 => '"foo bar baz" must contain "fox"',
+            ],
+            1 => [
+                '__root__' => 'zeta must pass all the rules',
+                0 => '"foo bar baz" must contain "lorem"',
+                1 => '"foo bar baz" must contain "ipsum"',
+            ],
+        ]),
+));
