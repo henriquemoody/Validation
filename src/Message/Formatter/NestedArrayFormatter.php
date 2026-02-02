@@ -15,7 +15,6 @@ use Respect\Validation\Message\ArrayFormatter;
 use Respect\Validation\Message\Renderer;
 use Respect\Validation\Result;
 
-use function array_reduce;
 use function array_values;
 use function count;
 use function current;
@@ -32,25 +31,30 @@ final readonly class NestedArrayFormatter implements ArrayFormatter
     public function format(Result $result, Renderer $renderer, array $templates): array
     {
         if ($result->children === []) {
-            return [$this->getKey($result) => $renderer->render($result, $templates)];
+            return [$result->path->value ?? $result->id->value => $renderer->render($result, $templates)];
         }
 
-        [$children, $hasString] = $this->prepareChildren($result->children);
+        $hasStringKey = false;
+        foreach ($result->children as $child) {
+            if (!is_numeric($child->path->value ?? $child->id->value)) {
+                $hasStringKey = true;
+                break;
+            }
+        }
 
-        $messages = array_reduce(
-            $children,
-            fn(array $messages, array $item) => $this->appendMessage(
+        $messages = [];
+        $childCount = count($result->children);
+        foreach ($result->children as $child) {
+            $messages = $this->formatChild(
                 $messages,
-                $item['key'],
-                $item['child'],
+                $child,
                 $renderer,
                 $templates,
-                $hasString,
+                $hasStringKey,
                 $result,
-                isParentVisible: count($children) > 1,
-            ),
-            [],
-        );
+                $childCount > 1,
+            );
+        }
 
         if (count($messages) > 1) {
             return ['__root__' => $renderer->render($result, $templates)] + $messages;
@@ -60,95 +64,70 @@ final readonly class NestedArrayFormatter implements ArrayFormatter
     }
 
     /**
-     * @param array<Result> $children
-     *
-     * @return array{0: array<array{key: string|int, child: Result}>, 1: bool}
-     */
-    private function prepareChildren(array $children): array
-    {
-        $mapped = [];
-        $hasString = false;
-
-        foreach ($children as $child) {
-            $key = $this->getKey($child);
-            if (!is_numeric($key)) {
-                $hasString = true;
-            }
-
-            $mapped[] = ['key' => $key, 'child' => $child];
-        }
-
-        return [$mapped, $hasString];
-    }
-
-    /**
      * @param array<string|int, mixed> $messages
      * @param array<string|int, mixed> $templates
      *
      * @return array<string|int, mixed>
      */
-    private function appendMessage(
+    private function formatChild(
         array $messages,
-        string|int $key,
         Result $child,
         Renderer $renderer,
         array $templates,
-        bool $hasString,
+        bool $hasStringKey,
         Result $parent,
-        bool $isParentVisible,
+        bool $hasMultipleChildren,
     ): array {
-        $key = $this->normalizeKey($key, $hasString, $child);
+        $rawKey = $child->path->value ?? $child->id->value;
+        $normalizedKey = $hasStringKey && is_numeric($rawKey) ? $child->id->value : $rawKey;
 
-        $appended = $this->renderChild($child, $renderer, $templates, $parent, $isParentVisible);
+        $formatted = $this->format(
+            $hasMultipleChildren && $child->name === $parent->name ? $child->withoutName() : $child,
+            $renderer,
+            $templates,
+        );
 
-        if (is_array($appended) && count($appended) > 1 && !isset($appended['__root__'])) {
-            $appended = ['__root__' => $renderer->render($child, $templates)] + $appended;
+        $childMessage = count($formatted) === 1 ? current($formatted) : $formatted;
+
+        if (is_array($childMessage) && count($childMessage) > 1 && !isset($childMessage['__root__'])) {
+            $childMessage = ['__root__' => $renderer->render($child, $templates)] + $childMessage;
         }
 
-        if (!$hasString) {
-            $messages[] = $appended;
+        if (!$hasStringKey) {
+            $messages[] = $childMessage;
 
             return $messages;
         }
 
-        if (!isset($messages[$key])) {
-            $messages[$key] = $appended;
+        if (!isset($messages[$normalizedKey])) {
+            $messages[$normalizedKey] = $childMessage;
 
             return $messages;
         }
 
         if ($child->path !== null) {
-            return $this->handlePathCollision($messages, $key, $appended);
+            return $this->mergeWithExistingPath($messages, $normalizedKey, $childMessage);
         }
 
-        return $this->handleIdCollision($messages, $appended, $parent, $renderer, $templates);
-    }
-
-    private function normalizeKey(string|int $key, bool $hasString, Result $child): string|int
-    {
-        if ($hasString && is_numeric($key)) {
-            return $child->id->value;
-        }
-
-        return $key;
+        return $this->flattenToIndexedList($messages, $childMessage, $parent, $renderer, $templates);
     }
 
     /**
      * @param array<string|int, mixed> $messages
-     * @param array<int|string, mixed>|string $appended
+     * @param array<string|int, mixed>|string $childMessage
      *
      * @return array<string|int, mixed>
      */
-    private function handlePathCollision(array $messages, string|int $key, array|string $appended): array
+    private function mergeWithExistingPath(array $messages, string|int $key, array|string $childMessage): array
     {
         if (is_array($messages[$key])) {
             if (isset($messages[$key]['__root__'])) {
                 $messages[$key] = [$messages[$key]];
             }
 
-            $messages[$key][] = $appended;
+            $messages[$key][] = $childMessage;
         } else {
-            $messages[$key] = [$messages[$key], $appended];
+            $messages[$key] = [$messages[$key], $childMessage];
         }
 
         return $messages;
@@ -156,52 +135,20 @@ final readonly class NestedArrayFormatter implements ArrayFormatter
 
     /**
      * @param array<string|int, mixed> $messages
-     * @param array<int|string, mixed>|string $appended
+     * @param array<string|int, mixed>|string $childMessage
      * @param array<string|int, mixed> $templates
      *
      * @return array<string|int, mixed>
      */
-    private function handleIdCollision(
+    private function flattenToIndexedList(
         array $messages,
-        array|string $appended,
+        array|string $childMessage,
         Result $parent,
         Renderer $renderer,
         array $templates,
     ): array {
         $parentMessage = $messages['__root__'] ?? $renderer->render($parent, $templates);
-        $list = array_values($messages);
-        $list[] = $appended;
 
-        return ['__root__' => $parentMessage] + $list;
-    }
-
-    /**
-     * @param array<string|int, array<string>> $templates
-     *
-     * @return array<string>|string
-     */
-    private function renderChild(
-        Result $child,
-        Renderer $renderer,
-        array $templates,
-        Result $parent,
-        bool $isParentVisible,
-    ): array|string {
-        $formatted = $this->format(
-            $isParentVisible && $child->name === $parent->name ? $child->withoutName() : $child,
-            $renderer,
-            $templates,
-        );
-
-        if (count($formatted) === 1) {
-            return current($formatted);
-        }
-
-        return $formatted;
-    }
-
-    private function getKey(Result $result): string|int
-    {
-        return $result->path->value ?? $result->id->value;
+        return ['__root__' => $parentMessage] + array_values($messages) + [count($messages) => $childMessage];
     }
 }
