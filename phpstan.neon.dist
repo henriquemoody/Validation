@@ -1,3 +1,6 @@
+includes:
+    - extension.neon
+
 parameters:
   fileExtensions:
     - php
@@ -23,7 +26,7 @@ parameters:
       path: tests/src/Stubs
     - message: '/Call to an undefined method Pest\\PendingCalls\\TestCall|Pest\\Support\\HigherOrderTapProxy::with\(\)./'
       path: tests/feature/SerializableTest.php
-  level: 8
+  level: 9
   treatPhpDocTypesAsCertain: false
   paths:
     - src/

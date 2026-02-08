@@ -73,6 +73,13 @@
             "Respect\\Validation\\Test\\": "tests/src/"
         }
     },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    },
     "scripts": {
         "bench-profile": "vendor/bin/phpbench xdebug:profile",
         "bench": "vendor/bin/phpbench run",

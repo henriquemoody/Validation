@@ -1,0 +1,25 @@
+services:
+    -
+        class: Respect\Validation\PHPStan\InstanceAssertTypeSpecifyingExtension
+        arguments:
+            class: Respect\Validation\ValidatorBuilder
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
+    -
+        class: Respect\Validation\PHPStan\InstanceAssertTypeSpecifyingExtension
+        arguments:
+            class: Respect\Validation\Mixins\Chain
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
+    -
+        class: Respect\Validation\PHPStan\AllTypeAssertTypeSpecifyingExtension
+        arguments:
+            class: Respect\Validation\ValidatorBuilder
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
+    -
+        class: Respect\Validation\PHPStan\AllTypeAssertTypeSpecifyingExtension
+        arguments:
+            class: Respect\Validation\Mixins\Chain
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
