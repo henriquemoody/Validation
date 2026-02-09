@@ -13,12 +13,7 @@
 declare(strict_types=1);
 
 use Respect\Validation\ValidatorBuilder;
-use Respect\StringFormatter\FormatterBuilder;
 
 if (!class_exists('v')) {
     class_alias(ValidatorBuilder::class, 'v');
-}
-
-if (!class_exists('f')) {
-    class_alias(FormatterBuilder::class, 'f');
 }
