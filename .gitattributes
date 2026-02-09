@@ -3,7 +3,7 @@
 # Project files
 /README.md -export-ignore
 /composer.json -export-ignore
-/aliases.php -export
+/aliases.php -export-ignore
 /data -export-ignore
 /src -export-ignore
 
