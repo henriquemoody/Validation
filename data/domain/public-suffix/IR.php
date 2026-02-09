@@ -9,6 +9,6 @@ return [
     'NET.IR',
     'ORG.IR',
     'SCH.IR',
-    'ايران.IR',
     'ایران.IR',
+    'ايران.IR',
 ];

@@ -4,11 +4,11 @@
 return [
     'AC.IM',
     'CO.IM',
-    'COM.IM',
     'LTD.CO.IM',
+    'PLC.CO.IM',
+    'COM.IM',
     'NET.IM',
     'ORG.IM',
-    'PLC.CO.IM',
     'TT.IM',
     'TV.IM',
 ];

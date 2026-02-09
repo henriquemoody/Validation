@@ -4,7 +4,6 @@
 return [
     'AB.CA',
     'BC.CA',
-    'GC.CA',
     'MB.CA',
     'NB.CA',
     'NF.CA',
@@ -17,4 +16,5 @@ return [
     'QC.CA',
     'SK.CA',
     'YK.CA',
+    'GC.CA',
 ];

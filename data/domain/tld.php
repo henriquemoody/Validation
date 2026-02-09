@@ -489,7 +489,6 @@ return [
     'GOLD',
     'GOLDPOINT',
     'GOLF',
-    'GOO',
     'GOODYEAR',
     'GOOG',
     'GOOGLE',

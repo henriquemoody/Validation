@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
 return [
     'AC.AT',
+    'STH.AC.AT',
     'CO.AT',
     'GV.AT',
     'OR.AT',
-    'STH.AC.AT',
 ];

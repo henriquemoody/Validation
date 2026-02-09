@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
 return [
     'ASSO.FR',
-    'AVOUES.FR',
-    'CCI.FR',
     'COM.FR',
     'GOUV.FR',
-    'GRETA.FR',
-    'HUISSIER-JUSTICE.FR',
     'NOM.FR',
     'PRD.FR',
     'TM.FR',
+    'AVOUES.FR',
+    'CCI.FR',
+    'GRETA.FR',
+    'HUISSIER-JUSTICE.FR',
 ];

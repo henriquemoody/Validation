@@ -2,11 +2,9 @@
 // SPDX-FileCopyrightText: 2007–22 Mozilla Foundation
 // SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
 return [
-    'AC.PR',
     'BIZ.PR',
     'COM.PR',
     'EDU.PR',
-    'EST.PR',
     'GOV.PR',
     'INFO.PR',
     'ISLA.PR',
@@ -14,5 +12,7 @@ return [
     'NET.PR',
     'ORG.PR',
     'PRO.PR',
+    'AC.PR',
+    'EST.PR',
     'PROF.PR',
 ];

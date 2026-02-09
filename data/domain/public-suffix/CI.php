@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
 return [
     'AC.CI',
-    'ASSO.CI',
     'AÉROPORT.CI',
+    'ASSO.CI',
     'CO.CI',
     'COM.CI',
     'ED.CI',

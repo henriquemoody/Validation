@@ -2,6 +2,8 @@
 // SPDX-FileCopyrightText: 2007–22 Mozilla Foundation
 // SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
 return [
+    'AIRLINE.AERO',
+    'AIRPORT.AERO',
     'ACCIDENT-INVESTIGATION.AERO',
     'ACCIDENT-PREVENTION.AERO',
     'AEROBATIC.AERO',
@@ -11,8 +13,6 @@ return [
     'AIR-SURVEILLANCE.AERO',
     'AIR-TRAFFIC-CONTROL.AERO',
     'AIRCRAFT.AERO',
-    'AIRLINE.AERO',
-    'AIRPORT.AERO',
     'AIRTRAFFIC.AERO',
     'AMBULANCE.AERO',
     'ASSOCIATION.AERO',
