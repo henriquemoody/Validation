@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa9f29c82a049d9f491ccfc5af541b2d",
+    "content-hash": "fb8bd733c6dead511a06f445eab760ff",
     "packages": [
         {
             "name": "laravel/serializable-closure",
@@ -250,16 +250,16 @@
         },
         {
             "name": "respect/string-formatter",
-            "version": "1.6.1",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Respect/StringFormatter.git",
-                "reference": "4c3bfd069c0704f38715b6208d8b22fa4fcc8376"
+                "reference": "113499ae9f211e51abab10f65eb8bc9fc7a0b99f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Respect/StringFormatter/zipball/4c3bfd069c0704f38715b6208d8b22fa4fcc8376",
-                "reference": "4c3bfd069c0704f38715b6208d8b22fa4fcc8376",
+                "url": "https://api.github.com/repos/Respect/StringFormatter/zipball/113499ae9f211e51abab10f65eb8bc9fc7a0b99f",
+                "reference": "113499ae9f211e51abab10f65eb8bc9fc7a0b99f",
                 "shasum": ""
             },
             "require": {
@@ -302,9 +302,9 @@
             "description": "A powerful and flexible way of formatting and transforming strings",
             "support": {
                 "issues": "https://github.com/Respect/StringFormatter/issues",
-                "source": "https://github.com/Respect/StringFormatter/tree/1.6.1"
+                "source": "https://github.com/Respect/StringFormatter/tree/1.7.0"
             },
-            "time": "2026-02-09T12:41:42+00:00"
+            "time": "2026-02-09T12:55:44+00:00"
         },
         {
             "name": "respect/stringifier",

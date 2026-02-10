@@ -23,7 +23,7 @@
         "php": ">=8.5",
         "php-di/php-di": "^7.1",
         "psr/container": "^2.0",
-        "respect/string-formatter": "^1.6",
+        "respect/string-formatter": "^1.7",
         "respect/stringifier": "^3.0",
         "symfony/polyfill-intl-idn": "^1.33",
         "symfony/polyfill-mbstring": "^1.33"
