@@ -23,6 +23,21 @@ parameters:
       path: tests/src/Message/TestingHandler.php
     - message: '/Property Respect\\Validation\\Test\\Stubs\\.+::\$[a-zA-Z]+ is never read, only written./'
       path: tests/src/Stubs
+    # Why: Coverage stubs intentionally reference non-existent classes
+    # (UnknownClass, UnknownOne, UnknownTwo, NonExistentClass) to exercise the
+    # DocblockPropertyResolver branches that handle unresolvable types.
+    - message: '/Property Respect\\Validation\\Test\\Stubs\\.+ has unknown class Respect\\Validation\\Test\\Stubs\\(UnknownClass|UnknownOne|UnknownTwo|NonExistentClass|Collection) as its type\./'
+      path: tests/src/Stubs
+    # Why: Coverage stubs intentionally use @var without a type and with
+    # unresolvable generic arguments to exercise parseVarType()/resolveArrayGeneric().
+    - message: '/PHPDoc tag @var has invalid value \(\): Unexpected token/'
+      path: tests/src/Stubs/WithVarWithoutTypeProperty.php
+    - message: '/PHPDoc tag @var for property .+ contains unresolvable type\./'
+      path: tests/src/Stubs
+    - message: '/PHPDoc tag @var for property .+ with type mixed is not subtype of native type array\./'
+      path: tests/src/Stubs
+    - message: '/Property .+ type has no value type specified in iterable type array\./'
+      path: tests/src/Stubs
   level: 8
   treatPhpDocTypesAsCertain: false
   paths:

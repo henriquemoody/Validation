@@ -21,10 +21,13 @@ use ReflectionObject;
 use ReflectionProperty;
 use ReflectionUnionType;
 use Respect\Dev\CodeGen\FluentBuilder\Mixin;
+use Respect\Validation\Helpers\InMemoryCache;
 use Respect\Validation\Id;
 use Respect\Validation\Message\Template;
 use Respect\Validation\Result;
 use Respect\Validation\Validator;
+use Respect\Validation\Validators\Attributes\DocblockPropertyResolver;
+use Respect\Validation\Validators\Attributes\PropertyResolver;
 use Respect\Validation\Validators\Core\Reducer;
 
 use function spl_object_id;
@@ -42,6 +45,14 @@ final class Attributes implements Validator
 
     /** @var array<int, true> */
     private array $visited = [];
+
+    private readonly PropertyResolver $typeResolver;
+
+    public function __construct(
+        PropertyResolver|null $typeResolver = null,
+    ) {
+        $this->typeResolver = $typeResolver ?? new DocblockPropertyResolver(new InMemoryCache());
+    }
 
     public function evaluate(mixed $input): Result
     {
@@ -120,6 +131,8 @@ final class Attributes implements Validator
         if ($type instanceof ReflectionNamedType) {
             if (!$type->isBuiltin()) {
                 $propertyValidators[] = $this;
+            } elseif ($type->getName() === 'array') {
+                $propertyValidators = [...$propertyValidators, ...$this->typeResolver->resolve($property, $this)];
             }
         }
 

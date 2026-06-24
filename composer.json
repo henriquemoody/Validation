@@ -22,6 +22,8 @@
     "require": {
         "php": ">=8.5",
         "php-di/php-di": "^7.1",
+        "phpstan/phpdoc-parser": "^2.0",
+        "psr/simple-cache": "^3.0",
         "psr/container": "^2.0",
         "respect/string-formatter": "^1.7",
         "respect/stringifier": "^3.0",
@@ -33,7 +35,7 @@
         "giggsey/libphonenumber-for-php-lite": "^8.13 || ^9.0",
         "mikey179/vfsstream": "^1.6",
         "nette/php-generator": "^4.1",
-        "pestphp/pest": "^4.6",
+        "pestphp/pest": "^4.7",
         "phpbench/phpbench": "^1.4",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",

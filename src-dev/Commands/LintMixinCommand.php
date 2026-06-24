@@ -21,6 +21,7 @@ use Respect\Dev\Differ\Item;
 use Respect\Validation\Mixins\Chain;
 use Respect\Validation\Validator;
 use Respect\Validation\ValidatorBuilder;
+use Respect\Validation\Validators\Attributes\PropertyResolver;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,7 +72,7 @@ final class LintMixinCommand extends Command
             config: $config,
             methodBuilder: new MethodBuilder(
                 excludedTypePrefixes: ['Sokil', 'Egulias'],
-                excludedTypeNames: ['finfo'],
+                excludedTypeNames: ['finfo', PropertyResolver::class],
             ),
             interfaces: [
                 new InterfaceConfig(
