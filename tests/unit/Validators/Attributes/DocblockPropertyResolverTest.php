@@ -28,13 +28,13 @@ use Respect\Validation\Test\Stubs\WithArrayIntersectionProperty;
 use Respect\Validation\Test\Stubs\WithArrayObjectProperty;
 use Respect\Validation\Test\Stubs\WithArrayShapeProperty;
 use Respect\Validation\Test\Stubs\WithArrayStringProperty;
-use Respect\Validation\Test\Stubs\WithArrayUnresolvableInnerProperty;
 use Respect\Validation\Test\Stubs\WithArrayUnionProperty;
+use Respect\Validation\Test\Stubs\WithArrayUnresolvableInnerProperty;
 use Respect\Validation\Test\Stubs\WithBoolProperty;
 use Respect\Validation\Test\Stubs\WithClassAndScalarsIntersectionProperty;
 use Respect\Validation\Test\Stubs\WithClassAndUnresolvedIntersectionProperty;
-use Respect\Validation\Test\Stubs\WithFqnClassProperty;
 use Respect\Validation\Test\Stubs\WithFloatProperty;
+use Respect\Validation\Test\Stubs\WithFqnClassProperty;
 use Respect\Validation\Test\Stubs\WithGlobalClassProperty;
 use Respect\Validation\Test\Stubs\WithIntFloatUnionProperty;
 use Respect\Validation\Test\Stubs\WithIntKeyGenericProperty;
@@ -54,9 +54,11 @@ use Respect\Validation\Test\Stubs\WithShapeStringKeyProperty;
 use Respect\Validation\Test\Stubs\WithShapeUnresolvableValueProperty;
 use Respect\Validation\Test\Stubs\WithShortArrayStringProperty;
 use Respect\Validation\Test\Stubs\WithStringUnresolvedUnionProperty;
+use Respect\Validation\Test\Stubs\WithStringVarProperty;
 use Respect\Validation\Test\Stubs\WithThisTypeProperty;
 use Respect\Validation\Test\Stubs\WithTwoArgGenericIntProperty;
 use Respect\Validation\Test\Stubs\WithTwoArgGenericObjectProperty;
+use Respect\Validation\Test\Stubs\WithUntypedVarProperty;
 use Respect\Validation\Test\Stubs\WithVarWithoutTypeProperty;
 use Respect\Validation\Test\TestCase;
 use Respect\Validation\Validators\AnyOf;
@@ -70,6 +72,8 @@ use Respect\Validation\Validators\KeySet;
 use Respect\Validation\Validators\NullOr;
 use Respect\Validation\Validators\StringType;
 use stdClass;
+
+use function dirname;
 
 #[Group(' rule')]
 #[CoversClass(DocblockPropertyResolver::class)]
@@ -958,5 +962,27 @@ final class DocblockPropertyResolverTest extends TestCase
         $input->pair = [0 => 1, 1 => 'not an int']; // @phpstan-ignore assign.propertyType
 
         self::assertInvalidInput(new Attributes(), $input);
+    }
+
+    // --- array-type guard: non-array builtin type returns [] ------------------
+
+    #[Test]
+    public function shouldReturnEmptyWhenPropertyTypeIsNotArrayBuiltin(): void
+    {
+        $property = new ReflectionProperty(WithStringVarProperty::class, 'name');
+        $attributes = new Attributes();
+
+        self::assertSame([], $this->resolver->resolve($property, $attributes));
+    }
+
+    // --- array-type guard: no declared type returns [] -------------------------
+
+    #[Test]
+    public function shouldReturnEmptyWhenPropertyHasNoDeclaredType(): void
+    {
+        $property = new ReflectionProperty(WithUntypedVarProperty::class, 'value');
+        $attributes = new Attributes();
+
+        self::assertSame([], $this->resolver->resolve($property, $attributes));
     }
 }

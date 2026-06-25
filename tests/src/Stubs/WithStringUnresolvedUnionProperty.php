@@ -19,6 +19,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithStringUnresolvedUnionProperty
 {
-    /** @var string|UnknownClass */
-    public mixed $value;
+    /**
+     * @var string|UnknownClass
+     * @phpstan-var array
+     */
+    public array $value;
 }

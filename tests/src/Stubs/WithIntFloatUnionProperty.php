@@ -18,6 +18,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithIntFloatUnionProperty
 {
-    /** @var int|float */
-    public mixed $value;
+    /**
+     * @var int|float
+     * @phpstan-var array
+     */
+    public array $value;
 }

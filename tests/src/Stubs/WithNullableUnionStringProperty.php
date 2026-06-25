@@ -18,6 +18,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithNullableUnionStringProperty
 {
-    /** @var string|null */
-    public mixed $name;
+    /**
+     * @var string|null
+     * @phpstan-var array
+     */
+    public array $name;
 }

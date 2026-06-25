@@ -20,6 +20,9 @@ use stdClass;
  */
 final class WithFqnClassProperty
 {
-    /** @var \stdClass */
-    public mixed $value;
+    /**
+     * @var stdClass
+     * @phpstan-var array
+     */
+    public array $value;
 }

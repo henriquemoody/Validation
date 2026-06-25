@@ -28,6 +28,7 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\PhpDocParser\ParserConfig;
 use Psr\SimpleCache\CacheInterface;
+use ReflectionNamedType;
 use ReflectionProperty;
 use Respect\Validation\Validator;
 use Respect\Validation\Validators\AllOf;
@@ -88,6 +89,11 @@ final class DocblockPropertyResolver implements PropertyResolver
     /** @return array<Validator> */
     public function resolve(ReflectionProperty $property, Attributes $attributes): array
     {
+        $type = $property->getType();
+        if (!($type instanceof ReflectionNamedType && $type->isBuiltin() && $type->getName() === 'array')) {
+            return [];
+        }
+
         $typeNode = $this->parsePropertyVarType($property);
         if ($typeNode === null) {
             return [];

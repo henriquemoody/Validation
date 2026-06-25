@@ -18,6 +18,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithBoolProperty
 {
-    /** @var bool */
-    public mixed $value;
+    /**
+     * @var bool
+     * @phpstan-var array
+     */
+    public array $value;
 }

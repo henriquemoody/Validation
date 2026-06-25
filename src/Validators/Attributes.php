@@ -15,18 +15,18 @@ namespace Respect\Validation\Validators;
 use Attribute;
 use ReflectionAttribute;
 use ReflectionClass;
-use ReflectionIntersectionType;
-use ReflectionNamedType;
 use ReflectionObject;
 use ReflectionProperty;
-use ReflectionUnionType;
 use Respect\Dev\CodeGen\FluentBuilder\Mixin;
 use Respect\Validation\Helpers\InMemoryCache;
 use Respect\Validation\Id;
 use Respect\Validation\Message\Template;
 use Respect\Validation\Result;
 use Respect\Validation\Validator;
+use Respect\Validation\Validators\Attributes\CompositePropertyResolver;
 use Respect\Validation\Validators\Attributes\DocblockPropertyResolver;
+use Respect\Validation\Validators\Attributes\ExplicitAttributePropertyResolver;
+use Respect\Validation\Validators\Attributes\NativeTypePropertyResolver;
 use Respect\Validation\Validators\Attributes\PropertyResolver;
 use Respect\Validation\Validators\Core\Reducer;
 
@@ -46,12 +46,16 @@ final class Attributes implements Validator
     /** @var array<int, true> */
     private array $visited = [];
 
-    private readonly PropertyResolver $typeResolver;
+    private readonly PropertyResolver $propertyResolver;
 
     public function __construct(
-        PropertyResolver|null $typeResolver = null,
+        PropertyResolver|null $propertyResolver = null,
     ) {
-        $this->typeResolver = $typeResolver ?? new DocblockPropertyResolver(new InMemoryCache());
+        $this->propertyResolver = $propertyResolver ?? new CompositePropertyResolver(
+            new ExplicitAttributePropertyResolver(),
+            new NativeTypePropertyResolver(),
+            new DocblockPropertyResolver(new InMemoryCache()),
+        );
     }
 
     public function evaluate(mixed $input): Result
@@ -115,44 +119,7 @@ final class Attributes implements Validator
     /** @return array<Validator> */
     private function getPropertyInnerValidators(ReflectionProperty $property): array
     {
-        $propertyValidators = [];
-        $hasExplicitAttributes = false;
-        foreach ($property->getAttributes(Validator::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
-            $propertyValidator = $attribute->getName() === self::class ? $this : $attribute->newInstance();
-            $hasExplicitAttributes = $propertyValidator === $this;
-            $propertyValidators[] = $propertyValidator;
-        }
-
-        if ($hasExplicitAttributes) {
-            return $propertyValidators;
-        }
-
-        $type = $property->getType();
-        if ($type instanceof ReflectionNamedType) {
-            if (!$type->isBuiltin()) {
-                $propertyValidators[] = $this;
-            } elseif ($type->getName() === 'array') {
-                $propertyValidators = [...$propertyValidators, ...$this->typeResolver->resolve($property, $this)];
-            }
-        }
-
-        if ($type instanceof ReflectionIntersectionType) {
-            $propertyValidators[] = $this;
-        }
-
-        if ($type instanceof ReflectionUnionType) {
-            foreach ($type->getTypes() as $innerType) {
-                if (!$innerType instanceof ReflectionNamedType || $innerType->isBuiltin()) {
-                    continue;
-                }
-
-                /** @var class-string $class */
-                $class = $innerType->getName();
-                $propertyValidators[] = new Given(new Instance($class), $this);
-            }
-        }
-
-        return $propertyValidators;
+        return $this->propertyResolver->resolve($property, $this);
     }
 
     /** @return array<ReflectionProperty> */

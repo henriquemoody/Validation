@@ -22,6 +22,9 @@ use stdClass;
  */
 final class WithGlobalClassProperty
 {
-    /** @var stdClass */
-    public mixed $value;
+    /**
+     * @var stdClass
+     * @phpstan-var array
+     */
+    public array $value;
 }

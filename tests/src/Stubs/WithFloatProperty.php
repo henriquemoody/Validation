@@ -17,6 +17,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithFloatProperty
 {
-    /** @var float */
-    public mixed $value;
+    /**
+     * @var float
+     * @phpstan-var array
+     */
+    public array $value;
 }

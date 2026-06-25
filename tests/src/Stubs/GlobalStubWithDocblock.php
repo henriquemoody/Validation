@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: (c) Respect Project Contributors
@@ -19,6 +21,9 @@
  */
 final class GlobalStubWithDocblock
 {
-    /** @var stdClass */
-    public stdClass $value;
+    /**
+     * @var stdClass
+     * @phpstan-var array
+     */
+    public array $value;
 }

@@ -17,6 +17,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithNullableStringProperty
 {
-    /** @var ?string */
-    public mixed $name;
+    /**
+     * @var ?string
+     * @phpstan-var array
+     */
+    public array $name;
 }

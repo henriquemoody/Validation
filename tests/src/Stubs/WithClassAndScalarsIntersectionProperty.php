@@ -21,5 +21,5 @@ namespace Respect\Validation\Test\Stubs;
 final class WithClassAndScalarsIntersectionProperty
 {
     /** @var FirstRole&string&float&bool */
-    public mixed $value;
+    public array $value;
 }

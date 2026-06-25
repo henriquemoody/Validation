@@ -19,6 +19,9 @@ namespace Respect\Validation\Test\Stubs;
  */
 final class WithClassAndUnresolvedIntersectionProperty
 {
-    /** @var FirstRole&UnknownClass */
-    public mixed $value;
+    /**
+     * @var FirstRole&UnknownClass
+     * @phpstan-var array
+     */
+    public array $value;
 }
